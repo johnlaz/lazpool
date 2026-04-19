@@ -1,0 +1,5 @@
+{
+  "ha_host": "10.0.0.51",
+  "ha_port": 8123,
+  "ha_token": "PASTE_YOUR_HA_TOKEN_HERE"
+}

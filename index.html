@@ -8,476 +8,553 @@
 <meta name="theme-color" content="#070d1a">
 <title>LAZPOOL</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   DESIGN TOKENS
-   ============================================================ */
 :root {
-  --bg-void:#070d1a; --bg-deep:#0b1425; --bg-card:#0f1d30; --bg-card-hover:#132338;
-  --gold:#c9a84c; --gold-light:#e8c96b; --gold-dim:rgba(201,168,76,.14); --gold-dim2:rgba(201,168,76,.07);
-  --teal:#3dd9c4; --teal-dim:rgba(61,217,196,.11); --teal-glow:rgba(61,217,196,.28);
-  --red:#e05c5c; --red-dim:rgba(224,92,92,.14);
-  --purple:#9b7fe8; --purple-dim:rgba(155,127,232,.12);
-  --green:#4caf7d; --green-dim:rgba(76,175,125,.14);
-  --text-primary:#e8e0d4; --text-secondary:rgba(232,224,212,.5); --text-muted:rgba(232,224,212,.25);
-  --border:rgba(201,168,76,.11); --border-active:rgba(201,168,76,.38); --border-teal:rgba(61,217,196,.23);
-  --shadow-gold:0 0 28px rgba(201,168,76,.08); --shadow-teal:0 0 36px rgba(61,217,196,.11);
-  --radius:16px; --radius-sm:10px;
+  --bg-void: #070d1a;
+  --bg-deep: #0b1425;
+  --bg-card: #0f1d30;
+  --bg-card-hover: #132338;
+  --gold: #c9a84c;
+  --gold-light: #e8c96b;
+  --gold-dim: rgba(201,168,76,0.14);
+  --gold-dim2: rgba(201,168,76,0.07);
+  --teal: #3dd9c4;
+  --teal-dim: rgba(61,217,196,0.11);
+  --teal-glow: rgba(61,217,196,0.28);
+  --red: #e05c5c;
+  --red-dim: rgba(224,92,92,0.14);
+  --purple: #9b7fe8;
+  --purple-dim: rgba(155,127,232,0.12);
+  --text-primary: #e8e0d4;
+  --text-secondary: rgba(232,224,212,0.5);
+  --text-muted: rgba(232,224,212,0.25);
+  --border: rgba(201,168,76,0.11);
+  --border-active: rgba(201,168,76,0.38);
+  --border-teal: rgba(61,217,196,0.23);
+  --shadow-gold: 0 0 28px rgba(201,168,76,0.08);
+  --shadow-teal: 0 0 36px rgba(61,217,196,0.11);
+  --radius: 16px;
+  --radius-sm: 10px;
 }
 
-/* ============================================================
-   RESET & BASE
-   ============================================================ */
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{background:var(--bg-void);color:var(--text-primary);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-input,select,textarea{font-family:'DM Sans',sans-serif}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { background:var(--bg-void); color:var(--text-primary); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
 
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(ellipse 80% 40% at 15% 0%,rgba(61,217,196,.04) 0%,transparent 60%),
-             radial-gradient(ellipse 60% 50% at 85% 100%,rgba(201,168,76,.05) 0%,transparent 60%)}
-body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:repeating-linear-gradient(180deg,transparent 0,transparent 3px,rgba(61,217,196,.007) 3px,rgba(61,217,196,.007) 4px);
-  animation:shimmer 9s ease-in-out infinite}
-@keyframes shimmer{0%,100%{opacity:.4}50%{opacity:1}}
+/* BG */
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 80% 40% at 15% 0%,rgba(61,217,196,0.04) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 100%,rgba(201,168,76,0.05) 0%,transparent 60%);
+}
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:repeating-linear-gradient(180deg,transparent 0px,transparent 3px,rgba(61,217,196,0.007) 3px,rgba(61,217,196,0.007) 4px);
+  animation:shimmer 9s ease-in-out infinite;
+}
+@keyframes shimmer { 0%,100%{opacity:.4} 50%{opacity:1} }
 
-/* ============================================================
-   ANIMATIONS
-   ============================================================ */
-@keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeUp  {from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn  {from{opacity:0}to{opacity:1}}
-@keyframes popIn   {from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
-@keyframes loadBar {from{width:0}to{width:100%}}
-@keyframes slideUp {from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse-teal{0%,100%{opacity:1;box-shadow:0 0 8px var(--teal)}50%{opacity:.5;box-shadow:0 0 4px var(--teal)}}
+/* LAYOUT */
+.app { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:0 0 110px; min-height:100vh; }
 
-/* ============================================================
-   PAGES / TAB SYSTEM
-   ============================================================ */
-.page{display:none;position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 0 110px;min-height:100vh;animation:fadeIn .25s ease both}
-.page.active{display:block}
+/* ANIMATIONS */
+@keyframes fadeDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeUp   { from{opacity:0;transform:translateY(14px)}  to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+@keyframes popIn    { from{opacity:0;transform:scale(0.94)} to{opacity:1;transform:scale(1)} }
+@keyframes loadBar  { from{width:0} to{width:100%} }
 
-/* ============================================================
-   LOADING SCREEN
-   ============================================================ */
-.loading-overlay{position:fixed;inset:0;background:var(--bg-void);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;transition:opacity .6s ease}
-.loading-overlay.hidden{opacity:0;pointer-events:none}
-.loading-wordmark{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;letter-spacing:.15em;margin-bottom:8px}
-.loading-wordmark span{color:var(--gold)}
-.loading-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.3em;color:var(--text-muted);text-transform:uppercase;margin-bottom:48px}
-.loading-bar-track{width:120px;height:1px;background:rgba(255,255,255,.06);border-radius:1px;overflow:hidden}
-.loading-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));animation:loadBar 1.2s ease forwards}
+/* LOADING */
+.loading-overlay {
+  position:fixed; inset:0; background:var(--bg-void);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:999; transition:opacity .6s ease;
+}
+.loading-overlay.hidden { opacity:0; pointer-events:none; }
+.loading-wordmark { font-family:'Playfair Display',serif; font-size:36px; font-weight:700; letter-spacing:.15em; margin-bottom:8px; }
+.loading-wordmark span { color:var(--gold); }
+.loading-sub { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.3em; color:var(--text-muted); text-transform:uppercase; margin-bottom:48px; }
+.loading-bar-track { width:120px; height:1px; background:rgba(255,255,255,.06); border-radius:1px; overflow:hidden; }
+.loading-bar-fill { height:100%; background:linear-gradient(90deg,var(--teal),var(--gold)); animation:loadBar 1.2s ease forwards; }
 
-/* ============================================================
-   SETUP WIZARD OVERLAY
-   ============================================================ */
-.wizard-overlay{position:fixed;inset:0;background:var(--bg-void);z-index:900;overflow-y:auto;display:none}
-.wizard-overlay.visible{display:flex;flex-direction:column}
-.wizard-inner{max-width:480px;margin:0 auto;padding:60px 24px 40px;flex:1;display:flex;flex-direction:column;gap:28px}
-.wizard-logo{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;letter-spacing:.12em;animation:fadeDown .5s ease both}
-.wizard-logo span{color:var(--gold)}
-.wizard-headline{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;line-height:1.3;animation:fadeUp .5s .1s ease both}
-.wizard-body{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-secondary);line-height:1.6;animation:fadeUp .5s .15s ease both}
-.wizard-step{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;animation:fadeUp .5s ease both}
-.wizard-step-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-.wizard-step-note{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--text-muted);margin-top:8px;line-height:1.5}
-.wizard-actions{display:flex;gap:10px;animation:fadeUp .5s .4s ease both}
-.wizard-skip{background:transparent;border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 20px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);cursor:pointer;text-transform:uppercase;transition:all .2s}
-.wizard-skip:hover{border-color:var(--border-active);color:var(--text-primary)}
-.wizard-save{flex:1;background:var(--gold-dim);border:1px solid var(--border-active);border-radius:var(--radius-sm);padding:13px 20px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--gold);cursor:pointer;text-transform:uppercase;transition:all .2s;text-align:center}
-.wizard-save:hover{background:var(--gold);color:var(--bg-void)}
+/* HEADER */
+.header {
+  padding:52px 20px 20px; display:flex; align-items:flex-start; justify-content:space-between;
+  animation:fadeDown .6s ease both;
+}
+.wordmark { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; letter-spacing:.12em; line-height:1; }
+.wordmark span { color:var(--gold); }
+.header-sub { font-family:'DM Mono',monospace; font-size:10px; font-weight:300; letter-spacing:.25em; color:var(--text-muted); text-transform:uppercase; margin-top:5px; }
+.header-status { display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+.status-pill {
+  display:flex; align-items:center; gap:6px;
+  background:var(--teal-dim); border:1px solid var(--border-teal); border-radius:20px;
+  padding:5px 10px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em; color:var(--teal); text-transform:uppercase;
+  transition:all .3s;
+}
+.status-dot { width:6px; height:6px; border-radius:50%; background:var(--teal); box-shadow:0 0 8px var(--teal); animation:pulse-teal 2s ease-in-out infinite; }
+@keyframes pulse-teal { 0%,100%{opacity:1;box-shadow:0 0 8px var(--teal)} 50%{opacity:.5;box-shadow:0 0 4px var(--teal)} }
+.status-dot.offline { background:var(--red); box-shadow:0 0 8px var(--red); animation:none; }
+.last-sync { font-family:'DM Mono',monospace; font-size:9px; color:var(--text-muted); letter-spacing:.08em; }
 
-/* ============================================================
-   SHARED FORM ELEMENTS
-   ============================================================ */
-.field-group{display:flex;flex-direction:column;gap:14px}
-.field{display:flex;flex-direction:column;gap:6px}
-.field-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted)}
-.field-input{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s;width:100%}
-.field-input:focus{border-color:var(--border-active)}
-.field-input::placeholder{color:var(--text-muted)}
-.field-input.teal:focus{border-color:var(--border-teal)}
-.field-row{display:grid;grid-template-columns:2fr 1fr;gap:10px}
+/* TIME */
+.time-display { text-align:center; padding:0 20px 4px; }
+.time-clock { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.18em; color:var(--text-muted); }
 
-/* ============================================================
-   HEADER
-   ============================================================ */
-.header{padding:52px 20px 20px;display:flex;align-items:flex-start;justify-content:space-between;animation:fadeDown .6s ease both}
-.wordmark{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;letter-spacing:.12em;line-height:1}
-.wordmark span{color:var(--gold)}
-.header-sub{font-family:'DM Mono',monospace;font-size:10px;font-weight:300;letter-spacing:.25em;color:var(--text-muted);text-transform:uppercase;margin-top:5px}
-.header-status{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
-.status-pill{display:flex;align-items:center;gap:6px;background:var(--teal-dim);border:1px solid var(--border-teal);border-radius:20px;padding:5px 10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--teal);text-transform:uppercase;transition:all .3s;cursor:pointer}
-.status-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:pulse-teal 2s ease-in-out infinite}
-.status-dot.offline{background:var(--red);box-shadow:0 0 8px var(--red);animation:none}
-.status-dot.warn{background:var(--gold);box-shadow:0 0 8px var(--gold);animation:none}
-.last-sync{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:.08em}
+/* SECTION LABEL */
+.section-label {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.28em; color:var(--text-muted); text-transform:uppercase;
+  padding:0 20px; margin-bottom:12px; margin-top:28px;
+  display:flex; align-items:center; gap:10px;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
 
-/* ============================================================
-   SECTION LABEL
-   ============================================================ */
-.section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.28em;color:var(--text-muted);text-transform:uppercase;padding:0 20px;margin-bottom:12px;margin-top:28px;display:flex;align-items:center;gap:10px}
-.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
-.section-label.has-btn::after{display:none}
-.edit-trigger-btn{background:transparent;border:1px solid var(--border);border-radius:12px;padding:3px 10px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.15em;color:var(--text-muted);cursor:pointer;text-transform:uppercase;transition:all .2s;white-space:nowrap;margin-left:auto}
-.edit-trigger-btn:hover{border-color:var(--border-active);color:var(--gold)}
+/* TEMP ROW */
+.temp-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 20px; animation:fadeUp .5s .1s ease both; }
+.temp-card {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:18px 16px; position:relative; overflow:hidden;
+}
+.temp-card::before {
+  content:''; position:absolute; top:0;left:0;right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent); opacity:.4;
+}
+.temp-card.teal-accent::before { background:linear-gradient(90deg,transparent,var(--teal),transparent); }
+.temp-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.25em; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px; }
+.temp-value { font-family:'Playfair Display',serif; font-size:42px; font-weight:600; line-height:1; }
+.temp-value sup { font-size:16px; font-weight:400; color:var(--text-secondary); vertical-align:super; margin-left:2px; }
+.temp-target { font-family:'DM Mono',monospace; font-size:10px; color:var(--gold); margin-top:6px; letter-spacing:.08em; }
+.temp-card.teal-accent .temp-target { color:var(--teal); }
+.temp-icon { position:absolute; bottom:12px; right:14px; font-size:20px; opacity:.13; }
 
 /* ============================================================
-   TEMP CARDS
+   CIRCUIT SYSTEM
    ============================================================ */
-.temp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px;animation:fadeUp .5s .1s ease both}
-.temp-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;position:relative;overflow:hidden}
-.temp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.4}
-.temp-card.teal-accent::before{background:linear-gradient(90deg,transparent,var(--teal),transparent)}
-.temp-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.25em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px}
-.temp-value{font-family:'Playfair Display',serif;font-size:42px;font-weight:600;line-height:1}
-.temp-value sup{font-size:16px;font-weight:400;color:var(--text-secondary);vertical-align:super;margin-left:2px}
-.temp-target{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);margin-top:6px;letter-spacing:.08em}
-.temp-card.teal-accent .temp-target{color:var(--teal)}
-.temp-icon{position:absolute;bottom:12px;right:14px;font-size:20px;opacity:.13}
+.circuit-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 20px; }
+
+/* Normal circuit card */
+.circuit-btn {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:16px 14px; cursor:pointer; position:relative; overflow:hidden;
+  display:flex; flex-direction:column; gap:10px;
+  transition:all .22s ease; -webkit-user-select:none; user-select:none;
+  animation:popIn .3s ease both;
+}
+.circuit-btn::after {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 50% 60%,var(--gold-dim),transparent 70%);
+  opacity:0; transition:opacity .25s;
+}
+.circuit-btn.on { border-color:var(--border-active); background:var(--bg-card-hover); box-shadow:var(--shadow-gold); }
+.circuit-btn.on::after { opacity:1; }
+.circuit-btn.on.teal-circ { border-color:var(--border-teal); box-shadow:var(--shadow-teal); }
+.circuit-btn.on.teal-circ::after { background:radial-gradient(circle at 50% 60%,var(--teal-dim),transparent 70%); opacity:1; }
+.circuit-btn:active:not(.customize-mode *) { transform:scale(.97); }
+
+.circuit-top { display:flex; align-items:center; justify-content:space-between; }
+.circuit-icon { font-size:22px; line-height:1; filter:grayscale(1); transition:filter .3s; }
+.circuit-btn.on .circuit-icon { filter:grayscale(0); }
+
+/* Toggle ring */
+.toggle-ring {
+  width:28px; height:16px; border-radius:10px;
+  background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1);
+  position:relative; transition:all .22s ease; flex-shrink:0;
+}
+.toggle-ring::after {
+  content:''; position:absolute; width:10px; height:10px; border-radius:50%;
+  background:var(--text-muted); top:2px; left:2px; transition:all .22s ease;
+}
+.circuit-btn.on .toggle-ring { background:var(--gold-dim); border-color:var(--gold); }
+.circuit-btn.on.teal-circ .toggle-ring { background:var(--teal-dim); border-color:var(--teal); }
+.circuit-btn.on .toggle-ring::after { left:14px; background:var(--gold); }
+.circuit-btn.on.teal-circ .toggle-ring::after { left:14px; background:var(--teal); }
+
+.circuit-name { font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; color:var(--text-secondary); transition:color .22s; position:relative; z-index:1; }
+.circuit-btn.on .circuit-name { color:var(--text-primary); }
+.circuit-status { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); transition:color .22s; position:relative; z-index:1; }
+.circuit-btn.on .circuit-status { color:var(--gold); }
+.circuit-btn.on.teal-circ .circuit-status { color:var(--teal); }
+
+/* Pin badge */
+.pin-badge {
+  position:absolute; top:8px; right:8px; width:16px; height:16px;
+  background:var(--gold-dim); border:1px solid var(--border-active); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:8px;
+  opacity:0; transition:opacity .2s; pointer-events:none; z-index:2;
+}
+.circuit-btn.pinned .pin-badge { opacity:1; }
 
 /* ============================================================
-   CIRCUIT GRID
+   CUSTOMIZE MODE OVERLAY
    ============================================================ */
-.circuit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px}
-.circuit-btn{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px;cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;transition:all .22s ease;-webkit-user-select:none;user-select:none;animation:popIn .3s ease both}
-.circuit-btn::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 60%,var(--gold-dim),transparent 70%);opacity:0;transition:opacity .25s}
-.circuit-btn.on{border-color:var(--border-active);background:var(--bg-card-hover);box-shadow:var(--shadow-gold)}
-.circuit-btn.on::after{opacity:1}
-.circuit-btn.on.teal-circ{border-color:var(--border-teal);box-shadow:var(--shadow-teal)}
-.circuit-btn.on.teal-circ::after{background:radial-gradient(circle at 50% 60%,var(--teal-dim),transparent 70%);opacity:1}
-.circuit-btn:active:not(.customizing *){transform:scale(.97)}
-.circuit-top{display:flex;align-items:center;justify-content:space-between}
-.circuit-icon{font-size:22px;line-height:1;filter:grayscale(1);transition:filter .3s}
-.circuit-btn.on .circuit-icon{filter:grayscale(0)}
-.toggle-ring{width:28px;height:16px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);position:relative;transition:all .22s ease;flex-shrink:0}
-.toggle-ring::after{content:'';position:absolute;width:10px;height:10px;border-radius:50%;background:var(--text-muted);top:2px;left:2px;transition:all .22s ease}
-.circuit-btn.on .toggle-ring{background:var(--gold-dim);border-color:var(--gold)}
-.circuit-btn.on.teal-circ .toggle-ring{background:var(--teal-dim);border-color:var(--teal)}
-.circuit-btn.on .toggle-ring::after{left:14px;background:var(--gold)}
-.circuit-btn.on.teal-circ .toggle-ring::after{left:14px;background:var(--teal)}
-.circuit-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text-secondary);transition:color .22s;position:relative;z-index:1}
-.circuit-btn.on .circuit-name{color:var(--text-primary)}
-.circuit-status{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);transition:color .22s;position:relative;z-index:1}
-.circuit-btn.on .circuit-status{color:var(--gold)}
-.circuit-btn.on.teal-circ .circuit-status{color:var(--teal)}
-.pin-badge{position:absolute;top:8px;right:8px;width:16px;height:16px;background:var(--gold-dim);border:1px solid var(--border-active);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:2}
-.circuit-btn.pinned .pin-badge{opacity:1}
+.customize-bar {
+  position:fixed; top:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:480px; z-index:200;
+  background:rgba(7,13,26,0.96); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border-active);
+  padding:14px 20px 12px;
+  display:none; align-items:center; justify-content:space-between;
+  animation:fadeDown .3s ease both;
+}
+.customize-bar.visible { display:flex; }
+.customize-bar-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:600; color:var(--gold); }
+.customize-bar-sub { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.18em; color:var(--text-muted); text-transform:uppercase; margin-top:2px; }
+.customize-done-btn {
+  background:var(--gold-dim); border:1px solid var(--border-active); border-radius:20px;
+  padding:7px 16px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em;
+  color:var(--gold); cursor:pointer; text-transform:uppercase; transition:all .2s;
+}
+.customize-done-btn:hover { background:var(--gold); color:var(--bg-void); }
 
-/* CUSTOMIZE MODE */
-.customize-bar{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:200;background:rgba(7,13,26,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border-active);padding:14px 20px 12px;display:none;align-items:center;justify-content:space-between;animation:fadeDown .3s ease both}
-.customize-bar.visible{display:flex}
-.customize-bar-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--gold)}
-.customize-bar-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--text-muted);text-transform:uppercase;margin-top:2px}
-.customize-done-btn{background:var(--gold-dim);border:1px solid var(--border-active);border-radius:20px;padding:7px 16px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--gold);cursor:pointer;text-transform:uppercase;transition:all .2s}
-.customize-done-btn:hover{background:var(--gold);color:var(--bg-void)}
-.page.customizing{padding-top:68px}
-.card-edit-overlay{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;background:rgba(7,13,26,.9);backdrop-filter:blur(4px);border-radius:var(--radius);padding:10px;animation:fadeIn .15s ease both}
-.customizing .card-edit-overlay{display:flex}
-.edit-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
-.edit-action-btn{flex:1;min-width:0;padding:6px 3px;border-radius:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-align:center;border:1px solid;transition:all .18s;white-space:nowrap}
-.edit-action-btn.pin-btn  {background:var(--gold-dim);  border-color:var(--border-active);color:var(--gold)}
-.edit-action-btn.hide-btn {background:var(--red-dim);   border-color:rgba(224,92,92,.3); color:var(--red)}
+/* When customize mode is active, push content down */
+.app.customizing { padding-top:68px; }
+
+/* In customize mode, circuit cards get edit overlay */
+.customizing .circuit-btn {
+  cursor:default;
+}
+.customizing .circuit-btn:active { transform:none; }
+
+/* Edit overlay on each card */
+.card-edit-overlay {
+  position:absolute; inset:0; z-index:10;
+  display:none; flex-direction:column;
+  background:rgba(7,13,26,0.88); backdrop-filter:blur(4px);
+  border-radius:var(--radius); padding:10px;
+  animation:fadeIn .15s ease both;
+}
+.customizing .card-edit-overlay { display:flex; }
+
+.edit-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:auto; }
+.edit-action-btn {
+  flex:1; min-width:0; padding:6px 4px; border-radius:8px;
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase;
+  cursor:pointer; text-align:center; border:1px solid; transition:all .18s;
+  white-space:nowrap;
+}
+.edit-action-btn.pin-btn   { background:var(--gold-dim);   border-color:var(--border-active); color:var(--gold);   }
+.edit-action-btn.hide-btn  { background:var(--red-dim);    border-color:rgba(224,92,92,.3);   color:var(--red);    }
 .edit-action-btn.up-btn,
-.edit-action-btn.down-btn {background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);color:var(--text-muted)}
-.edit-action-btn.rename-btn{background:var(--purple-dim);border-color:rgba(155,127,232,.3);color:var(--purple)}
-.edit-action-btn:hover{opacity:.8;transform:scale(1.02)}
-.edit-action-btn:active{transform:scale(.96)}
-.edit-circuit-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--text-muted);text-transform:uppercase;margin-bottom:3px}
-.edit-circuit-name{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:auto}
-.edit-rename-input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--border-active);border-radius:8px;padding:5px 8px;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;margin-bottom:4px;display:none}
-.edit-rename-input.visible{display:block}
+.edit-action-btn.down-btn  { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.1); color:var(--text-muted); }
+.edit-action-btn:hover { opacity:.8; transform:scale(1.02); }
+.edit-action-btn:active { transform:scale(.96); }
 
-/* HIDDEN DRAWER */
-.hidden-drawer{margin:0 20px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.hidden-drawer-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;transition:background .2s}
-.hidden-drawer-header:hover{background:rgba(255,255,255,.02)}
-.hidden-drawer-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--text-muted);text-transform:uppercase}
-.hidden-drawer-count{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:3px 9px;font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted)}
-.hidden-drawer-chevron{font-size:10px;color:var(--text-muted);transition:transform .3s}
-.hidden-drawer.open .hidden-drawer-chevron{transform:rotate(180deg)}
-.hidden-drawer-body{display:none;border-top:1px solid var(--border)}
-.hidden-drawer.open .hidden-drawer-body{display:block}
-.hidden-circuit-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04)}
-.hidden-circuit-row:last-child{border-bottom:none}
-.hidden-circuit-info{display:flex;align-items:center;gap:10px}
-.hidden-circuit-icon{font-size:18px;filter:grayscale(1);opacity:.5}
-.hidden-circuit-name{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-secondary)}
-.hidden-circuit-id{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:.1em;margin-top:1px}
-.restore-btn{background:var(--teal-dim);border:1px solid var(--border-teal);border-radius:12px;padding:5px 12px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--teal);cursor:pointer;text-transform:uppercase;transition:all .2s;white-space:nowrap}
-.restore-btn:hover{background:var(--teal);color:var(--bg-void)}
+.edit-circuit-label {
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.15em; color:var(--text-muted);
+  text-transform:uppercase; margin-bottom:4px;
+}
+.edit-circuit-name {
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; color:var(--text-primary);
+  margin-bottom:auto;
+}
+.edit-rename-input {
+  width:100%; background:rgba(255,255,255,.06); border:1px solid var(--border-active);
+  border-radius:8px; padding:5px 8px; color:var(--text-primary);
+  font-family:'DM Sans',sans-serif; font-size:12px; outline:none; margin-bottom:4px;
+  display:none;
+}
+.edit-rename-input.visible { display:block; }
+.edit-action-btn.rename-btn { background:var(--purple-dim); border-color:rgba(155,127,232,.3); color:var(--purple); }
 
 /* ============================================================
-   PUMP / HEATER / SPA
+   HIDDEN CIRCUITS DRAWER
    ============================================================ */
-.pump-card,.heater-card,.spa-card,.schedule-card{margin:0 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
-.pump-card::before{content:'';display:block;height:1px;margin:-20px -20px 20px;background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:.28}
-.pump-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.pump-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted)}
-.pump-rpm{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--teal)}
-.pump-rpm span{font-family:'DM Mono',monospace;font-size:11px;font-weight:400;color:var(--text-muted);margin-left:3px}
-.speed-track{position:relative;height:4px;background:rgba(255,255,255,.06);border-radius:2px;margin-bottom:12px;cursor:pointer}
-.speed-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--teal-dim),var(--teal));border-radius:2px;transition:width .25s;box-shadow:0 0 8px var(--teal-glow)}
-.speed-thumb{position:absolute;width:14px;height:14px;background:var(--teal);border-radius:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 12px var(--teal-glow);cursor:grab;transition:left .25s}
-.speed-labels{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:.1em}
-.pump-presets{display:flex;gap:6px;margin-top:14px}
-.preset-btn{flex:1;padding:7px 4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-sm);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--text-muted);cursor:pointer;text-align:center;transition:all .18s;text-transform:uppercase}
-.preset-btn.active,.preset-btn:hover{background:var(--teal-dim);border-color:var(--border-teal);color:var(--teal)}
-.preset-btn:active{transform:scale(.96)}
-.heater-card{display:flex;align-items:center;justify-content:space-between}
-.heater-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px}
-.heater-state{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-secondary)}
-.heater-state.heating{color:#e8a44c}
-.setpoint-control{display:flex;align-items:center;gap:12px}
-.setpoint-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text-secondary);font-size:18px;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center}
-.setpoint-btn:hover{background:var(--gold-dim);border-color:var(--border-active);color:var(--gold)}
-.setpoint-btn:active{transform:scale(.92)}
-.setpoint-value{font-family:'Playfair Display',serif;font-size:30px;font-weight:600;color:var(--gold);min-width:56px;text-align:center}
-.setpoint-value span{font-size:14px;font-weight:400;color:var(--text-muted);font-family:'DM Mono',monospace}
-.spa-card{cursor:pointer;transition:all .22s ease;position:relative;overflow:hidden}
-.spa-card.active{border-color:var(--border-active);background:var(--bg-card-hover);box-shadow:var(--shadow-gold)}
-.spa-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(201,168,76,.06),transparent 70%);opacity:0;transition:opacity .3s}
-.spa-card.active::after{opacity:1}
-.spa-inner{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
-.spa-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:600}
-.spa-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:.15em;margin-top:3px;text-transform:uppercase}
-.spa-card.active .spa-sub{color:var(--gold)}
-.spa-icon{font-size:32px;opacity:.55;transition:all .3s}
-.spa-card.active .spa-icon{opacity:1;filter:drop-shadow(0 0 8px rgba(201,168,76,.5))}
+.hidden-drawer {
+  margin:0 20px; border:1px solid var(--border); border-radius:var(--radius);
+  overflow:hidden; transition:all .3s ease;
+}
+.hidden-drawer-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px; cursor:pointer; transition:background .2s;
+}
+.hidden-drawer-header:hover { background:rgba(255,255,255,.02); }
+.hidden-drawer-title { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em; color:var(--text-muted); text-transform:uppercase; }
+.hidden-drawer-count {
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  border-radius:12px; padding:3px 9px; font-family:'DM Mono',monospace; font-size:9px; color:var(--text-muted);
+}
+.hidden-drawer-chevron { font-size:10px; color:var(--text-muted); transition:transform .3s; }
+.hidden-drawer.open .hidden-drawer-chevron { transform:rotate(180deg); }
+.hidden-drawer-body { display:none; border-top:1px solid var(--border); }
+.hidden-drawer.open .hidden-drawer-body { display:block; }
+
+.hidden-circuit-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; border-bottom:1px solid rgba(255,255,255,.04);
+  transition:background .2s;
+}
+.hidden-circuit-row:last-child { border-bottom:none; }
+.hidden-circuit-info { display:flex; align-items:center; gap:10px; }
+.hidden-circuit-icon { font-size:18px; filter:grayscale(1); opacity:.5; }
+.hidden-circuit-name { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text-secondary); }
+.hidden-circuit-id { font-family:'DM Mono',monospace; font-size:9px; color:var(--text-muted); letter-spacing:.1em; margin-top:1px; }
+.restore-btn {
+  background:var(--teal-dim); border:1px solid var(--border-teal); border-radius:12px;
+  padding:5px 12px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.12em;
+  color:var(--teal); cursor:pointer; text-transform:uppercase; transition:all .2s;
+  white-space:nowrap;
+}
+.restore-btn:hover { background:var(--teal); color:var(--bg-void); }
+
+/* ============================================================
+   PUMP / HEATER / SPA (unchanged from v1)
+   ============================================================ */
+.pump-card, .heater-card, .spa-card, .schedule-card {
+  margin:0 20px; background:var(--bg-card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:20px; animation:fadeUp .5s ease both;
+}
+.pump-card::before {
+  content:''; display:block; height:1px; margin:-20px -20px 20px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent); opacity:.28;
+}
+.pump-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.pump-title { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.25em; text-transform:uppercase; color:var(--text-muted); }
+.pump-rpm { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; color:var(--teal); }
+.pump-rpm span { font-family:'DM Mono',monospace; font-size:11px; font-weight:400; color:var(--text-muted); margin-left:3px; }
+.speed-track { position:relative; height:4px; background:rgba(255,255,255,.06); border-radius:2px; margin-bottom:12px; cursor:pointer; }
+.speed-fill { position:absolute; left:0;top:0;bottom:0; background:linear-gradient(90deg,var(--teal-dim),var(--teal)); border-radius:2px; transition:width .25s; box-shadow:0 0 8px var(--teal-glow); }
+.speed-thumb { position:absolute; width:14px; height:14px; background:var(--teal); border-radius:50%; top:50%; transform:translate(-50%,-50%); box-shadow:0 0 12px var(--teal-glow); cursor:grab; transition:left .25s; }
+.speed-labels { display:flex; justify-content:space-between; font-family:'DM Mono',monospace; font-size:9px; color:var(--text-muted); letter-spacing:.1em; }
+.pump-presets { display:flex; gap:6px; margin-top:14px; }
+.preset-btn {
+  flex:1; padding:7px 4px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.1em;
+  color:var(--text-muted); cursor:pointer; text-align:center; transition:all .18s; text-transform:uppercase;
+}
+.preset-btn.active, .preset-btn:hover { background:var(--teal-dim); border-color:var(--border-teal); color:var(--teal); }
+.preset-btn:active { transform:scale(.96); }
+
+/* HEATER */
+.heater-card { display:flex; align-items:center; justify-content:space-between; }
+.heater-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.25em; text-transform:uppercase; color:var(--text-muted); margin-bottom:4px; }
+.heater-state { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text-secondary); }
+.heater-state.heating { color:#e8a44c; }
+.setpoint-control { display:flex; align-items:center; gap:12px; }
+.setpoint-btn {
+  width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.04);
+  border:1px solid var(--border); color:var(--text-secondary); font-size:18px;
+  cursor:pointer; transition:all .18s; display:flex; align-items:center; justify-content:center;
+}
+.setpoint-btn:hover { background:var(--gold-dim); border-color:var(--border-active); color:var(--gold); }
+.setpoint-btn:active { transform:scale(.92); }
+.setpoint-value { font-family:'Playfair Display',serif; font-size:30px; font-weight:600; color:var(--gold); min-width:56px; text-align:center; }
+.setpoint-value span { font-size:14px; font-weight:400; color:var(--text-muted); font-family:'DM Mono',monospace; }
+
+/* SPA CARD */
+.spa-card { cursor:pointer; transition:all .22s ease; position:relative; overflow:hidden; }
+.spa-card.active { border-color:var(--border-active); background:var(--bg-card-hover); box-shadow:var(--shadow-gold); }
+.spa-card::after {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 80% 50%,rgba(201,168,76,.06),transparent 70%);
+  opacity:0; transition:opacity .3s;
+}
+.spa-card.active::after { opacity:1; }
+.spa-inner { display:flex; align-items:center; justify-content:space-between; position:relative; z-index:1; }
+.spa-title { font-family:'Playfair Display',serif; font-size:18px; font-weight:600; }
+.spa-sub { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-muted); letter-spacing:.15em; margin-top:3px; text-transform:uppercase; }
+.spa-card.active .spa-sub { color:var(--gold); }
+.spa-icon { font-size:32px; opacity:.55; transition:all .3s; }
+.spa-card.active .spa-icon { opacity:1; filter:drop-shadow(0 0 8px rgba(201,168,76,.5)); }
 
 /* CHEM */
-.chem-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 20px}
-.chem-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 10px;text-align:center}
-.chem-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px}
-.chem-value{font-family:'Playfair Display',serif;font-size:22px;font-weight:600}
-.chem-bar{height:2px;border-radius:1px;background:rgba(255,255,255,.06);margin-top:8px;position:relative;overflow:hidden}
-.chem-fill{position:absolute;left:0;top:0;bottom:0;border-radius:1px}
-.chem-fill.ok{background:var(--teal)} .chem-fill.warn{background:var(--gold)} .chem-fill.bad{background:var(--red)}
+.chem-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:0 20px; animation:fadeUp .5s ease both; }
+.chem-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 10px; text-align:center; }
+.chem-label { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:6px; }
+.chem-value { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; }
+.chem-bar { height:2px; border-radius:1px; background:rgba(255,255,255,.06); margin-top:8px; position:relative; overflow:hidden; }
+.chem-fill { position:absolute; left:0;top:0;bottom:0; border-radius:1px; }
+.chem-fill.ok { background:var(--teal); }
+.chem-fill.warn { background:var(--gold); }
+.chem-fill.bad { background:var(--red); }
 
 /* SCHEDULE */
-.schedule-item{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.schedule-item:last-child{border-bottom:none}
-.sched-name{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-secondary)}
-.sched-time{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.06em}
-.sched-days{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:.1em;margin-top:2px}
-.sched-badge{background:var(--gold-dim);border:1px solid var(--border-active);border-radius:6px;padding:3px 8px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.15em;color:var(--gold);text-transform:uppercase}
-.sched-badge.off{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);color:var(--text-muted)}
+.schedule-item { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.04); }
+.schedule-item:last-child { border-bottom:none; }
+.sched-name { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text-secondary); }
+.sched-time { font-family:'DM Mono',monospace; font-size:11px; color:var(--gold); letter-spacing:.06em; }
+.sched-days { font-family:'DM Mono',monospace; font-size:9px; color:var(--text-muted); letter-spacing:.1em; margin-top:2px; }
+.sched-badge { background:var(--gold-dim); border:1px solid var(--border-active); border-radius:6px; padding:3px 8px; font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.15em; color:var(--gold); text-transform:uppercase; }
+.sched-badge.off { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.08); color:var(--text-muted); }
 
-/* ============================================================
-   SONOS PLAYER PANEL
-   ============================================================ */
-.sonos-panel{margin:0 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.sonos-now-playing{display:flex;align-items:center;gap:14px;padding:16px}
-.sonos-art{width:52px;height:52px;border-radius:8px;background:var(--bg-deep);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;position:relative}
-.sonos-art img{width:100%;height:100%;object-fit:cover;border-radius:8px}
-.sonos-art .art-placeholder{font-size:22px;opacity:.4}
-.sonos-track-info{flex:1;min-width:0}
-.sonos-track{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sonos-artist{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:.08em;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sonos-room{font-family:'DM Mono',monospace;font-size:9px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-top:3px}
-.sonos-controls{display:flex;align-items:center;gap:0;border-top:1px solid var(--border)}
-.sonos-ctrl-btn{flex:1;padding:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .18s;font-size:18px;border:none;background:transparent;color:var(--text-secondary)}
-.sonos-ctrl-btn:hover{background:rgba(255,255,255,.04);color:var(--text-primary)}
-.sonos-ctrl-btn:active{transform:scale(.92)}
-.sonos-ctrl-btn.play-btn{color:var(--gold);font-size:22px}
-.sonos-ctrl-btn.play-btn:hover{color:var(--gold-light)}
-.sonos-vol-row{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--border)}
-.sonos-vol-icon{font-size:14px;color:var(--text-muted)}
-.sonos-vol-track{flex:1;height:3px;background:rgba(255,255,255,.06);border-radius:2px;cursor:pointer;position:relative}
-.sonos-vol-fill{position:absolute;left:0;top:0;bottom:0;background:var(--gold);border-radius:2px;transition:width .15s}
-.sonos-vol-pct{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);width:28px;text-align:right}
+/* CUSTOMIZE EDIT BTN (in section label) */
+.edit-trigger-btn {
+  background:transparent; border:1px solid var(--border); border-radius:12px;
+  padding:3px 10px; font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.15em;
+  color:var(--text-muted); cursor:pointer; text-transform:uppercase; transition:all .2s;
+  white-space:nowrap; margin-left:auto;
+}
+.edit-trigger-btn:hover { border-color:var(--border-active); color:var(--gold); }
+/* Override section-label::after when button present */
+.section-label.has-btn::after { display:none; }
 
-/* SONOS FAVORITES */
-.sonos-favs{border-top:1px solid var(--border);padding:14px 16px}
-.sonos-favs-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}
-.sonos-favs-grid{display:flex;gap:8px;flex-wrap:wrap}
-.fav-chip{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:6px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text-secondary);cursor:pointer;transition:all .18s;white-space:nowrap}
-.fav-chip:hover,.fav-chip.active{background:var(--gold-dim);border-color:var(--border-active);color:var(--gold)}
-.fav-chip:active{transform:scale(.95)}
+/* ALERT */
+.alert-banner { margin:0 20px 0; background:var(--red-dim); border:1px solid rgba(224,92,92,.3); border-radius:var(--radius-sm); padding:10px 14px; display:flex; align-items:center; gap:10px; animation:fadeUp .5s ease both; }
+.alert-icon { font-size:14px; }
+.alert-text { font-family:'DM Mono',monospace; font-size:10px; color:var(--red); letter-spacing:.1em; flex:1; }
+.alert-dismiss { font-size:14px; color:var(--red); cursor:pointer; opacity:.6; }
 
-/* SPEAKER SELECT */
-.speaker-select-row{border-top:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:8px;overflow-x:auto}
-.speaker-chip{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:5px 10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--text-muted);cursor:pointer;transition:all .18s;white-space:nowrap;text-transform:uppercase}
-.speaker-chip.active{background:var(--teal-dim);border-color:var(--border-teal);color:var(--teal)}
-.speaker-chip:active{transform:scale(.95)}
+/* BOTTOM NAV */
+.bottom-nav {
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:480px;
+  background:rgba(7,13,26,.93); backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex; padding:12px 10px calc(12px + env(safe-area-inset-bottom));
+  z-index:100;
+}
+.nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:6px; border-radius:var(--radius-sm); transition:all .18s; -webkit-user-select:none; user-select:none; }
+.nav-item:active { transform:scale(.94); }
+.nav-icon { font-size:22px; filter:grayscale(1) opacity(.4); transition:all .18s; }
+.nav-label { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); transition:color .18s; }
+.nav-item.active .nav-icon { filter:grayscale(0) drop-shadow(0 0 6px var(--gold)); }
+.nav-item.active .nav-label { color:var(--gold); }
 
-/* Sonos not configured state */
-.sonos-unconfigured{padding:28px 20px;text-align:center}
-.sonos-unconfigured-icon{font-size:32px;margin-bottom:12px;opacity:.4}
-.sonos-unconfigured-text{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-secondary);margin-bottom:16px}
-.sonos-config-btn{display:inline-block;background:var(--teal-dim);border:1px solid var(--border-teal);border-radius:20px;padding:8px 18px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--teal);cursor:pointer;text-transform:uppercase;transition:all .2s}
-.sonos-config-btn:hover{background:var(--teal);color:var(--bg-void)}
+/* Customize mode push-down for fixed bar */
+.app.customizing .circuit-grid { margin-top:0; }
+
+::-webkit-scrollbar { width:0; }
 
 /* ============================================================
    SETTINGS PAGE
    ============================================================ */
-.settings-header{padding:52px 20px 24px;animation:fadeDown .5s ease both}
-.settings-wordmark{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;letter-spacing:.1em}
-.settings-wordmark span{color:var(--gold)}
-.settings-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.25em;color:var(--text-muted);text-transform:uppercase;margin-top:4px}
-.settings-section{margin:0 20px 20px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.settings-section-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);padding:14px 16px;border-bottom:1px solid var(--border)}
-.settings-section-body{padding:16px}
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .18s}
-.settings-row:last-child{border-bottom:none}
-.settings-row:hover{background:rgba(255,255,255,.02)}
-.settings-row-label{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-primary)}
-.settings-row-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:.08em;margin-top:2px}
-.settings-row-value{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:.08em;text-align:right;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.settings-row-value.connected{color:var(--teal)}
-.settings-row-value.error{color:var(--red)}
-.settings-row-chevron{color:var(--text-muted);font-size:12px;margin-left:8px}
+.page { display:none; }
+.page.active { display:block; position:relative; z-index:1; max-width:480px; margin:0 auto; padding:0 0 110px; min-height:100vh; }
 
-/* Action buttons in settings */
-.settings-action-btn{width:100%;padding:13px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius-sm);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-secondary);cursor:pointer;text-transform:uppercase;transition:all .2s;text-align:center;display:block;margin-top:8px}
-.settings-action-btn:hover{border-color:var(--border-active);color:var(--gold)}
-.settings-action-btn.teal:hover{border-color:var(--border-teal);color:var(--teal)}
-.settings-action-btn.red:hover{border-color:rgba(224,92,92,.4);color:var(--red)}
-.settings-action-btn.green{background:var(--green-dim);border-color:rgba(76,175,125,.3);color:var(--green)}
+.settings-header { padding:52px 20px 24px; animation:fadeDown .5s ease both; }
+.settings-title { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; letter-spacing:.1em; }
+.settings-title span { color:var(--gold); }
+.settings-sub { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.25em; color:var(--text-muted); text-transform:uppercase; margin-top:4px; }
 
-/* ============================================================
-   MODAL SHEET
-   ============================================================ */
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:500;display:none;animation:fadeIn .2s ease both}
-.modal-backdrop.visible{display:flex;align-items:flex-end;justify-content:center}
-.modal-sheet{width:100%;max-width:480px;background:var(--bg-deep);border-top:1px solid var(--border);border-radius:20px 20px 0 0;padding:0 0 calc(20px + env(safe-area-inset-bottom));animation:slideUp .3s ease both;max-height:88vh;overflow-y:auto}
-.modal-handle{width:36px;height:3px;background:rgba(255,255,255,.15);border-radius:2px;margin:12px auto 0}
-.modal-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;padding:18px 20px 6px}
-.modal-title span{color:var(--gold)}
-.modal-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;color:var(--text-muted);text-transform:uppercase;padding:0 20px 18px;border-bottom:1px solid var(--border)}
-.modal-body{padding:20px}
-.modal-actions{display:flex;gap:10px;padding:0 20px;margin-top:4px}
-.modal-btn{flex:1;padding:13px;border-radius:var(--radius-sm);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;text-align:center;transition:all .2s;border:1px solid}
-.modal-btn.cancel{background:transparent;border-color:var(--border);color:var(--text-muted)}
-.modal-btn.confirm{background:var(--gold-dim);border-color:var(--border-active);color:var(--gold)}
-.modal-btn.confirm:hover{background:var(--gold);color:var(--bg-void)}
-.modal-btn.confirm.teal{background:var(--teal-dim);border-color:var(--border-teal);color:var(--teal)}
-.modal-btn.confirm.teal:hover{background:var(--teal);color:var(--bg-void)}
-.modal-btn.confirm.red{background:var(--red-dim);border-color:rgba(224,92,92,.3);color:var(--red)}
+.settings-section { margin:0 20px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.settings-section-title { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); padding:12px 16px; border-bottom:1px solid var(--border); }
 
-/* Connection status badge in modal */
-.conn-status-badge{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:var(--radius-sm);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;margin-top:12px}
-.conn-status-badge.ok{background:var(--green-dim);border:1px solid rgba(76,175,125,.3);color:var(--green)}
-.conn-status-badge.err{background:var(--red-dim);border:1px solid rgba(224,92,92,.3);color:var(--red)}
-.conn-status-badge.testing{background:var(--gold-dim);border:1px solid var(--border-active);color:var(--gold)}
-.conn-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.settings-row { display:flex; align-items:center; justify-content:space-between; padding:13px 16px; border-bottom:1px solid rgba(255,255,255,.04); cursor:pointer; transition:background .18s; }
+.settings-row:last-child { border-bottom:none; }
+.settings-row:hover { background:rgba(255,255,255,.02); }
+.settings-row-label { font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text-primary); }
+.settings-row-sub { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-muted); letter-spacing:.08em; margin-top:2px; }
+.settings-row-value { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-muted); text-align:right; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.settings-row-value.ok { color:var(--teal); }
+.settings-row-value.err { color:var(--red); }
+.settings-row-chevron { color:var(--text-muted); font-size:14px; margin-left:8px; }
 
-/* ============================================================
-   BOTTOM NAV
-   ============================================================ */
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(7,13,26,.93);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:12px 10px calc(12px + env(safe-area-inset-bottom));z-index:100}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:6px;border-radius:var(--radius-sm);transition:all .18s;-webkit-user-select:none;user-select:none}
-.nav-item:active{transform:scale(.94)}
-.nav-icon{font-size:22px;filter:grayscale(1) opacity(.4);transition:all .18s}
-.nav-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);transition:color .18s}
-.nav-item.active .nav-icon{filter:grayscale(0) drop-shadow(0 0 6px var(--gold))}
-.nav-item.active .nav-label{color:var(--gold)}
+.settings-body { padding:16px; display:flex; flex-direction:column; gap:12px; }
+.field { display:flex; flex-direction:column; gap:6px; }
+.field-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-muted); }
+.field-input { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-sm); padding:10px 14px; color:var(--text-primary); font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:border-color .2s; width:100%; }
+.field-input:focus { border-color:var(--border-active); }
+.field-input::placeholder { color:var(--text-muted); }
+.field-note { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.1em; color:var(--text-muted); line-height:1.6; }
 
-/* ALERT */
-.alert-banner{margin:0 20px;background:var(--red-dim);border:1px solid rgba(224,92,92,.3);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:center;gap:10px}
-.alert-icon{font-size:14px} .alert-text{font-family:'DM Mono',monospace;font-size:10px;color:var(--red);letter-spacing:.1em;flex:1}
-.alert-dismiss{font-size:14px;color:var(--red);cursor:pointer;opacity:.6}
+.action-btn { width:100%; padding:13px; border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; cursor:pointer; text-align:center; transition:all .2s; border:1px solid; }
+.action-btn.gold { background:var(--gold-dim); border-color:var(--border-active); color:var(--gold); }
+.action-btn.gold:hover { background:var(--gold); color:var(--bg-void); }
+.action-btn.teal { background:var(--teal-dim); border-color:var(--border-teal); color:var(--teal); }
+.action-btn.teal:hover { background:var(--teal); color:var(--bg-void); }
+.action-btn.red { background:var(--red-dim); border-color:rgba(224,92,92,.3); color:var(--red); }
+.action-btn.muted { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.09); color:var(--text-muted); }
+.action-btn:active { transform:scale(.97); }
 
-/* Time */
-.time-display{text-align:center;padding:0 20px 4px}
-.time-clock{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--text-muted)}
+/* Connection test result badge */
+.conn-badge { display:flex; align-items:center; gap:8px; padding:9px 12px; border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.1em; }
+.conn-badge.ok  { background:var(--teal-dim);  border:1px solid var(--border-teal);       color:var(--teal); }
+.conn-badge.err { background:var(--red-dim);   border:1px solid rgba(224,92,92,.3);       color:var(--red); }
+.conn-badge.testing { background:var(--gold-dim); border:1px solid var(--border-active);  color:var(--gold); }
+.conn-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0; }
 
-/* Version tag */
-.version-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--text-muted);text-align:center;padding:24px 0 8px;opacity:.5}
 
-::-webkit-scrollbar{width:0}
+/* Speaker picker */
+.speaker-picker { display:flex; flex-direction:column; gap:6px; }
+.speaker-pick-row { display:flex; align-items:center; justify-content:space-between;
+  padding:11px 14px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09);
+  border-radius:var(--radius-sm); cursor:pointer; transition:all .2s; -webkit-user-select:none; user-select:none; }
+.speaker-pick-row.selected { background:var(--teal-dim); border-color:var(--border-teal); }
+.speaker-pick-row:active { transform:scale(.98); }
+.speaker-pick-info { display:flex; flex-direction:column; gap:2px; }
+.speaker-pick-name { font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text-primary); }
+.speaker-pick-entity { font-family:'DM Mono',monospace; font-size:9px; color:var(--text-muted); letter-spacing:.08em; }
+.speaker-pick-check { font-size:18px; transition:opacity .2s; }
+.speaker-pick-row:not(.selected) .speaker-pick-check { opacity:.2; }
+.speaker-pick-row.selected .speaker-pick-name { color:var(--teal); }
+
+
+/* Sonos panel */
+.sonos-panel { margin:0 20px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; }
+.sonos-unconfigured { padding:24px 20px; text-align:center; }
+.sonos-unconfigured-icon { font-size:28px; margin-bottom:10px; opacity:.4; }
+.sonos-unconfigured-text { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text-secondary); margin-bottom:14px; line-height:1.5; }
+.sonos-config-btn { display:inline-block; background:var(--teal-dim); border:1px solid var(--border-teal); border-radius:20px; padding:7px 16px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.15em; color:var(--teal); cursor:pointer; text-transform:uppercase; transition:all .2s; }
+.sonos-config-btn:hover { background:var(--teal); color:var(--bg-void); }
+
+.sonos-now-playing { display:flex; align-items:center; gap:14px; padding:16px; }
+.sonos-art { width:52px; height:52px; border-radius:8px; background:var(--bg-deep); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; overflow:hidden; }
+.sonos-art img { width:100%; height:100%; object-fit:cover; border-radius:8px; }
+.sonos-track-info { flex:1; min-width:0; }
+.sonos-track { font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sonos-artist { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-muted); letter-spacing:.08em; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sonos-room { font-family:'DM Mono',monospace; font-size:9px; color:var(--teal); letter-spacing:.12em; text-transform:uppercase; margin-top:3px; }
+.sonos-controls { display:flex; border-top:1px solid var(--border); }
+.sonos-ctrl-btn { flex:1; padding:14px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:18px; background:transparent; border:none; color:var(--text-secondary); transition:background .18s; }
+.sonos-ctrl-btn:hover { background:rgba(255,255,255,.04); color:var(--text-primary); }
+.sonos-ctrl-btn:active { transform:scale(.92); }
+.sonos-ctrl-btn.play-btn { color:var(--gold); font-size:22px; }
+.sonos-vol-row { display:flex; align-items:center; gap:10px; padding:10px 16px; border-top:1px solid var(--border); }
+.sonos-vol-icon { font-size:14px; color:var(--text-muted); }
+.sonos-vol-track { flex:1; height:3px; background:rgba(255,255,255,.06); border-radius:2px; cursor:pointer; position:relative; }
+.sonos-vol-fill { position:absolute; left:0; top:0; bottom:0; background:var(--gold); border-radius:2px; transition:width .15s; }
+.sonos-vol-pct { font-family:'DM Mono',monospace; font-size:10px; color:var(--text-muted); width:30px; text-align:right; }
+.sonos-favs { border-top:1px solid var(--border); padding:14px 16px; }
+.sonos-favs-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
+.sonos-favs-grid { display:flex; gap:8px; flex-wrap:wrap; }
+.fav-chip { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09); border-radius:20px; padding:6px 12px; font-family:'DM Sans',sans-serif; font-size:12px; color:var(--text-secondary); cursor:pointer; transition:all .18s; white-space:nowrap; }
+.fav-chip:hover, .fav-chip.active { background:var(--gold-dim); border-color:var(--border-active); color:var(--gold); }
+.fav-chip:active { transform:scale(.95); }
+.speaker-select-row { border-top:1px solid var(--border); padding:10px 16px; display:flex; gap:8px; overflow-x:auto; }
+.speaker-chip { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09); border-radius:12px; padding:5px 10px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.1em; color:var(--text-muted); cursor:pointer; transition:all .18s; white-space:nowrap; text-transform:uppercase; }
+.speaker-chip.active { background:var(--teal-dim); border-color:var(--border-teal); color:var(--teal); }
+.speaker-chip:active { transform:scale(.95); }
+
+
+/* Media browser */
+.media-browser { border-top:1px solid var(--border); }
+.media-browser-bar { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid rgba(255,255,255,.04); }
+.media-browser-back { font-size:18px; cursor:pointer; color:var(--text-muted); transition:color .18s; padding:2px 6px; border-radius:6px; }
+.media-browser-back:hover { color:var(--gold); }
+.media-browser-title { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--text-muted); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.media-browser-reload { font-size:14px; cursor:pointer; color:var(--text-muted); opacity:.5; transition:opacity .18s; }
+.media-browser-reload:hover { opacity:1; }
+.media-items { max-height:200px; overflow-y:auto; }
+.media-item { display:flex; align-items:center; gap:10px; padding:9px 14px; border-bottom:1px solid rgba(255,255,255,.03); cursor:pointer; transition:background .15s; }
+.media-item:last-child { border-bottom:none; }
+.media-item:hover { background:rgba(255,255,255,.03); }
+.media-item:active { background:var(--gold-dim); }
+.media-item-thumb { width:36px; height:36px; border-radius:6px; background:var(--bg-deep); border:1px solid rgba(255,255,255,.06); flex-shrink:0; overflow:hidden; display:flex; align-items:center; justify-content:center; font-size:16px; }
+.media-item-thumb img { width:100%; height:100%; object-fit:cover; border-radius:5px; }
+.media-item-info { flex:1; min-width:0; }
+.media-item-title { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.media-item-sub { font-family:'DM Mono',monospace; font-size:9px; color:var(--text-muted); letter-spacing:.06em; margin-top:1px; }
+.media-item-arrow { font-size:12px; color:var(--text-muted); opacity:.4; flex-shrink:0; }
+.media-loading { padding:16px; text-align:center; font-family:'DM Mono',monospace; font-size:10px; color:var(--text-muted); letter-spacing:.15em; text-transform:uppercase; animation:shimmer 1.5s ease-in-out infinite; }
+
+.version-tag { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.2em; color:var(--text-muted); text-align:center; padding:28px 0 12px; opacity:.5; }
+
 </style>
 </head>
 <body>
 
-<!-- ============================================================
-     LOADING SCREEN
-     ============================================================ -->
+<!-- Loading Screen -->
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-wordmark">LAZ<span>POOL</span></div>
-  <div class="loading-sub" id="loadingSub">Initializing</div>
+  <div class="loading-sub">RS-4 Combo · REV T.2</div>
   <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
 </div>
 
-<!-- ============================================================
-     SETUP WIZARD
-     ============================================================ -->
-<div class="wizard-overlay" id="wizardOverlay">
-  <div class="wizard-inner">
-    <div class="wizard-logo">LAZ<span>POOL</span></div>
-    <div class="wizard-headline">Welcome. Let's get you connected.</div>
-    <div class="wizard-body">This app runs entirely on your local network — no cloud, no subscriptions. You'll need your AqualinkD server address and optionally your Home Assistant details for Sonos. You can skip any step and configure later in Settings.</div>
-
-    <!-- Step 1: Pool Name -->
-    <div class="wizard-step" style="animation-delay:.2s">
-      <div class="wizard-step-title">01 · Pool Identity</div>
-      <div class="field-group">
-        <div class="field">
-          <div class="field-label">Pool Name</div>
-          <input class="field-input" id="wiz-pool-name" placeholder="My Pool" value="">
-        </div>
-        <div class="field">
-          <div class="field-label">Panel Info</div>
-          <input class="field-input" id="wiz-panel-info" placeholder="RS-4 Combo · REV T.2" value="">
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 2: AqualinkD -->
-    <div class="wizard-step" style="animation-delay:.3s">
-      <div class="wizard-step-title">02 · AqualinkD Server</div>
-      <div class="field-group">
-        <div class="field-row">
-          <div class="field">
-            <div class="field-label">IP Address</div>
-            <input class="field-input" id="wiz-aq-host" placeholder="192.168.1.100" type="text" inputmode="url">
-          </div>
-          <div class="field">
-            <div class="field-label">Port</div>
-            <input class="field-input" id="wiz-aq-port" placeholder="8080" type="number">
-          </div>
-        </div>
-        <div class="wizard-step-note">The IP of your mini PC running AqualinkD. Default port is 8080.</div>
-      </div>
-    </div>
-
-    <!-- Step 3: Home Assistant -->
-    <div class="wizard-step" style="animation-delay:.4s">
-      <div class="wizard-step-title">03 · Home Assistant (for Sonos)</div>
-      <div class="field-group">
-        <div class="field-row">
-          <div class="field">
-            <div class="field-label">HA IP Address</div>
-            <input class="field-input teal" id="wiz-ha-host" placeholder="192.168.1.100" type="text" inputmode="url">
-          </div>
-          <div class="field">
-            <div class="field-label">Port</div>
-            <input class="field-input teal" id="wiz-ha-port" placeholder="8123" type="number">
-          </div>
-        </div>
-        <div class="field">
-          <div class="field-label">Long-Lived Access Token</div>
-          <input class="field-input teal" id="wiz-ha-token" placeholder="Paste your HA token here" type="password">
-        </div>
-        <div class="wizard-step-note">Generate a token in HA → Profile → Security → Long-Lived Access Tokens. Leave blank to skip Sonos integration.</div>
-      </div>
-    </div>
-
-    <div class="wizard-actions">
-      <div class="wizard-skip" onclick="skipWizard()">Skip for now</div>
-      <div class="wizard-save" onclick="saveWizard()">Save &amp; Launch →</div>
-    </div>
-  </div>
-</div>
-
-<!-- ============================================================
-     CUSTOMIZE BAR (fixed)
-     ============================================================ -->
+<!-- Customize Bar (fixed top) -->
 <div class="customize-bar" id="customizeBar">
   <div>
     <div class="customize-bar-title">Customize Circuits</div>
@@ -486,30 +563,16 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <div class="customize-done-btn" onclick="exitCustomize()">Done</div>
 </div>
 
-<!-- ============================================================
-     MODAL SHEET (shared)
-     ============================================================ -->
-<div class="modal-backdrop" id="modalBackdrop" onclick="closeModal(event)">
-  <div class="modal-sheet" id="modalSheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="modalTitle">Modal</div>
-    <div class="modal-sub" id="modalSub"></div>
-    <div class="modal-body" id="modalBody"></div>
-    <div class="modal-actions" id="modalActions"></div>
-  </div>
-</div>
-
-<!-- ============================================================
-     PAGE: CONTROL
-     ============================================================ -->
 <div class="page active" id="page-control">
+
+  <!-- Header -->
   <div class="header">
     <div>
-      <div class="wordmark" id="headerWordmark">LAZ<span>POOL</span></div>
-      <div class="header-sub" id="headerSub">RS-4 Combo · AquaLink Touch</div>
+      <div class="wordmark">LAZ<span>POOL</span></div>
+      <div class="header-sub">RS-4 Combo · AquaLink Touch</div>
     </div>
     <div class="header-status">
-      <div class="status-pill" id="connectionPill" onclick="showConnectionModal()">
+      <div class="status-pill" id="connectionPill">
         <div class="status-dot" id="statusDot"></div>
         <span id="statusText">LIVE</span>
       </div>
@@ -517,14 +580,17 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 
+  <!-- Time -->
   <div class="time-display"><div class="time-clock" id="timeClock"></div></div>
 
+  <!-- Alert (hidden) -->
   <div class="alert-banner" id="alertBanner" style="display:none">
     <span class="alert-icon">⚠️</span>
     <span class="alert-text" id="alertText">FREEZE PROTECTION ACTIVE</span>
-    <span class="alert-dismiss" onclick="this.closest('.alert-banner').style.display='none'">✕</span>
+    <span class="alert-dismiss" onclick="document.getElementById('alertBanner').style.display='none'">✕</span>
   </div>
 
+  <!-- Temperatures -->
   <div class="section-label">Temperatures</div>
   <div class="temp-row">
     <div class="temp-card">
@@ -541,12 +607,17 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 
+  <!-- Circuits Section -->
   <div class="section-label has-btn" id="circuitSectionLabel">
     Circuits
     <button class="edit-trigger-btn" onclick="enterCustomize()">Customize</button>
   </div>
-  <div class="circuit-grid" id="circuitGrid"></div>
-  <div style="padding:10px 0 0"></div>
+  <div class="circuit-grid" id="circuitGrid">
+    <!-- Dynamically rendered -->
+  </div>
+
+  <!-- Hidden Circuits Drawer -->
+  <div style="padding:10px 0 0;"></div>
   <div class="hidden-drawer" id="hiddenDrawer" style="display:none">
     <div class="hidden-drawer-header" onclick="toggleHiddenDrawer()">
       <div class="hidden-drawer-title">Hidden Circuits</div>
@@ -558,6 +629,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     <div class="hidden-drawer-body" id="hiddenDrawerBody"></div>
   </div>
 
+  <!-- Pump Speed -->
   <div class="section-label">Variable Speed Pump</div>
   <div class="pump-card">
     <div class="pump-header">
@@ -577,6 +649,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 
+  <!-- Heater -->
   <div class="section-label">Heater</div>
   <div class="heater-card">
     <div>
@@ -590,6 +663,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 
+  <!-- Spa -->
   <div class="section-label">Spa</div>
   <div class="spa-card" id="spaCard" onclick="toggleSpaMode()">
     <div class="spa-inner">
@@ -601,12 +675,12 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 
-  <!-- SONOS SECTION -->
-  <div class="section-label">Music</div>
-  <div class="sonos-panel" id="sonosPanel">
-    <!-- Rendered by JS based on config -->
-  </div>
 
+  <!-- Music -->
+  <div class="section-label">Music</div>
+  <div class="sonos-panel" id="sonosPanel"></div>
+
+  <!-- Chemistry -->
   <div class="section-label">Chemistry</div>
   <div class="chem-row">
     <div class="chem-card">
@@ -626,6 +700,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
     </div>
   </div>
 
+  <!-- Schedule -->
   <div class="section-label">Schedule</div>
   <div class="schedule-card">
     <div class="schedule-item">
@@ -645,112 +720,93 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
       <div style="text-align:right"><div class="sched-time">6:00 AM – 10:00 AM</div><div class="sched-badge off" style="margin-top:4px;display:inline-block">Scheduled</div></div>
     </div>
   </div>
+
 </div><!-- /page-control -->
 
-<!-- ============================================================
-     PAGE: SCHEDULE (placeholder)
-     ============================================================ -->
-<div class="page" id="page-schedule">
-  <div class="header"><div><div class="wordmark">LAZ<span>POOL</span></div><div class="header-sub">Schedule Manager</div></div></div>
-  <div style="padding:60px 20px;text-align:center;color:var(--text-muted)">
-    <div style="font-size:40px;margin-bottom:16px">📅</div>
-    <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase">Coming in v1.3</div>
-  </div>
-</div>
-
-<!-- ============================================================
-     PAGE: HISTORY (placeholder)
-     ============================================================ -->
-<div class="page" id="page-history">
-  <div class="header"><div><div class="wordmark">LAZ<span>POOL</span></div><div class="header-sub">History &amp; Logs</div></div></div>
-  <div style="padding:60px 20px;text-align:center;color:var(--text-muted)">
-    <div style="font-size:40px;margin-bottom:16px">📊</div>
-    <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase">Coming in v1.3</div>
-  </div>
-</div>
 
 <!-- ============================================================
      PAGE: SETTINGS
      ============================================================ -->
 <div class="page" id="page-settings">
   <div class="settings-header">
-    <div class="settings-wordmark">LAZ<span>POOL</span> <span style="color:var(--text-muted);font-size:16px;font-family:'DM Mono',monospace;letter-spacing:.1em;font-weight:400">Settings</span></div>
-    <div class="settings-sub">Configuration &amp; Connections</div>
+    <div class="settings-title">LAZ<span>POOL</span> <span style="color:var(--text-muted);font-size:16px;font-family:'DM Mono',monospace;font-weight:400">Settings</span></div>
+    <div class="settings-sub">Connections &amp; Configuration</div>
   </div>
 
   <!-- AqualinkD -->
   <div class="section-label" style="margin-top:0">AqualinkD</div>
   <div class="settings-section">
     <div class="settings-section-title">Pool Controller</div>
-    <div class="settings-row" onclick="openModal('aqualinkd')">
-      <div>
-        <div class="settings-row-label">Server Address</div>
-        <div class="settings-row-sub">IP address and port of AqualinkD</div>
+    <div class="settings-body">
+      <div class="field">
+        <div class="field-label">IP Address</div>
+        <input class="field-input" id="cfg-aq-host" placeholder="192.168.1.100" autocorrect="off" autocapitalize="none">
       </div>
-      <div style="display:flex;align-items:center">
-        <div class="settings-row-value" id="aq-display">Not configured</div>
-        <div class="settings-row-chevron">›</div>
+      <div class="field">
+        <div class="field-label">Port</div>
+        <input class="field-input" id="cfg-aq-port" placeholder="8080" type="number">
       </div>
-    </div>
-    <div class="settings-row" onclick="testAqualinkd()">
-      <div><div class="settings-row-label">Test Connection</div></div>
-      <div id="aq-conn-status" class="settings-row-value">—</div>
+      <div class="field-note">The IP of your mini PC running AqualinkD. Default port is 8080.</div>
+      <div class="action-btn gold" onclick="saveAqualinkd()">Save AqualinkD Settings</div>
+      <div class="action-btn muted" onclick="testAqualinkd()">Test Connection</div>
+      <div id="aq-test-result"></div>
     </div>
   </div>
 
   <!-- Home Assistant -->
   <div class="section-label">Home Assistant</div>
   <div class="settings-section">
-    <div class="settings-section-title">Sonos &amp; Smart Home</div>
-    <div class="settings-row" onclick="openModal('homeassistant')">
-      <div>
-        <div class="settings-row-label">HA Server Address</div>
-        <div class="settings-row-sub">IP, port and access token</div>
+    <div class="settings-section-title">Music &amp; Smart Home</div>
+    <div class="settings-body">
+      <div class="field">
+        <div class="field-label">IP Address</div>
+        <input class="field-input" id="cfg-ha-host" placeholder="10.0.0.51" autocorrect="off" autocapitalize="none">
       </div>
-      <div style="display:flex;align-items:center">
-        <div class="settings-row-value" id="ha-display">Not configured</div>
-        <div class="settings-row-chevron">›</div>
+      <div class="field">
+        <div class="field-label">Port</div>
+        <input class="field-input" id="cfg-ha-port" placeholder="8123" type="number">
       </div>
+      <div class="field">
+        <div class="field-label">Long-Lived Access Token</div>
+        <input class="field-input" id="cfg-ha-token" placeholder="Paste your HA token here" type="password" autocomplete="off">
+      </div>
+      <div class="field-note">Generate in HA → Profile → Security → Long-Lived Access Tokens.<br>
+      When using Local Serve (start.bat), the CORS proxy forwards this token to HA.</div>
+      <div class="action-btn teal" onclick="saveHomeAssistant()">Save HA Settings</div>
+      <div class="action-btn muted" onclick="testHomeAssistant()">Test Connection</div>
+      <div id="ha-test-result"></div>
     </div>
-    <div class="settings-row" onclick="openModal('sonos-speakers')">
-      <div>
-        <div class="settings-row-label">Sonos Speakers</div>
-        <div class="settings-row-sub">Entity IDs and display names</div>
+  </div>
+
+
+  <!-- Speakers -->
+  <div class="section-label">Speakers</div>
+  <div class="settings-section">
+    <div class="settings-section-title">Music Assistant / Sonos Players</div>
+    <div class="settings-body">
+      <div class="field-note" id="speaker-note">Save your HA settings and tap Load to see available speakers.</div>
+      <div class="action-btn teal" onclick="loadSpeakers()">Load Available Speakers</div>
+      <div class="speaker-picker" id="speakerPicker"></div>
+      <div id="speaker-save-row" style="display:none">
+        <div class="action-btn gold" onclick="saveSpeakers()" style="margin-top:4px">Save Speaker Selection</div>
       </div>
-      <div style="display:flex;align-items:center">
-        <div class="settings-row-value" id="sonos-display">Not configured</div>
-        <div class="settings-row-chevron">›</div>
-      </div>
-    </div>
-    <div class="settings-row" onclick="openModal('sonos-favs')">
-      <div>
-        <div class="settings-row-label">Music Favorites</div>
-        <div class="settings-row-sub">Quick-launch playlists and stations</div>
-      </div>
-      <div style="display:flex;align-items:center">
-        <div class="settings-row-value" id="favs-display">0 favorites</div>
-        <div class="settings-row-chevron">›</div>
-      </div>
-    </div>
-    <div class="settings-row" onclick="testHomeAssistant()">
-      <div><div class="settings-row-label">Test HA Connection</div></div>
-      <div id="ha-conn-status" class="settings-row-value">—</div>
     </div>
   </div>
 
   <!-- Identity -->
   <div class="section-label">Identity</div>
   <div class="settings-section">
-    <div class="settings-section-title">Display</div>
-    <div class="settings-row" onclick="openModal('identity')">
-      <div>
-        <div class="settings-row-label">Pool Name &amp; Panel Info</div>
-        <div class="settings-row-sub">Shown in header</div>
+    <div class="settings-section-title">Pool Name</div>
+    <div class="settings-body">
+      <div class="field">
+        <div class="field-label">Pool Name</div>
+        <input class="field-input" id="cfg-pool-name" placeholder="LAZPOOL">
       </div>
-      <div style="display:flex;align-items:center">
-        <div class="settings-row-value" id="identity-display">LAZPOOL</div>
-        <div class="settings-row-chevron">›</div>
+      <div class="field">
+        <div class="field-label">Panel Info (subtitle)</div>
+        <input class="field-input" id="cfg-panel-info" placeholder="RS-4 Combo · REV T.2">
       </div>
+      <div class="action-btn gold" onclick="saveIdentity()">Save</div>
     </div>
   </div>
 
@@ -758,21 +814,19 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   <div class="section-label">Data</div>
   <div class="settings-section">
     <div class="settings-section-title">Backup &amp; Restore</div>
-    <div class="settings-section-body">
-      <div style="font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text-secondary);margin-bottom:14px;line-height:1.5">Export your entire configuration — connections, circuit layout, speaker setup, and favorites — as a single JSON file. Import it on any device or after a reinstall.</div>
-      <button class="settings-action-btn green" onclick="exportConfig()">⬇ Export Config &amp; Layout</button>
-      <button class="settings-action-btn teal" onclick="triggerImport()">⬆ Import Config</button>
-      <input type="file" id="importFileInput" accept=".json" style="display:none" onchange="importConfig(this)">
-      <button class="settings-action-btn red" onclick="confirmReset()">↺ Reset All Settings</button>
+    <div class="settings-body">
+      <div class="field-note">Export saves all connections, circuit layout, and names as a single JSON file. Import it on any device to restore everything instantly.</div>
+      <div class="action-btn gold" onclick="exportConfig()">⬇ Export Config</div>
+      <div class="action-btn teal" onclick="triggerImport()">⬆ Import Config</div>
+      <input type="file" id="importInput" accept=".json" style="display:none" onchange="importConfig(this)">
+      <div class="action-btn red" onclick="confirmReset()">↺ Reset Everything</div>
     </div>
   </div>
 
-  <div class="version-tag">LAZPOOL v1.2 · Built for AquaLink RS-4</div>
+  <div class="version-tag">LAZPOOL v2.0 · Built for AquaLink RS-4</div>
 </div><!-- /page-settings -->
 
-<!-- ============================================================
-     BOTTOM NAV
-     ============================================================ -->
+<!-- Bottom Nav -->
 <div class="bottom-nav">
   <div class="nav-item active" onclick="switchPage('control',this)"><div class="nav-icon">🏊</div><div class="nav-label">Control</div></div>
   <div class="nav-item" onclick="switchPage('schedule',this)"><div class="nav-icon">📅</div><div class="nav-label">Schedule</div></div>
@@ -781,103 +835,461 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 </div>
 
 <script>
-'use strict';
 // ============================================================
-// CONFIG — everything user-configurable, persisted to localStorage
-// ============================================================
-const CONFIG_KEY    = 'lazpool_config_v1';
-const CIRCUITS_KEY  = 'lazpool_circuits_v2';
-const APP_VERSION   = '1.2';
-
-const DEFAULT_CONFIG = {
-  version: APP_VERSION,
-  identity: { poolName: 'LAZPOOL', panelInfo: 'RS-4 Combo · AquaLink Touch' },
-  aqualinkd: { host: '', port: '8080' },
-  homeassistant: { host: '', port: '8123', token: '' },
-  sonos: {
-    speakers: [
-      // { entityId: 'media_player.pool_speaker', name: 'Outdoor' }
-    ],
-    favorites: [
-      // { label: 'Chill Vibes', contentId: 'FV:2/1', contentType: 'favorite_item_id' }
-    ],
-    activeSpeaker: '',
-    volume: 45
-  }
-};
-
-// ============================================================
-// CIRCUIT REGISTRY — must be declared before loadCircuits() runs
+// CIRCUIT REGISTRY — Full AquaLink RS-4 Combo circuit list
+// id = AqualinkD API key, label = display name, icon = emoji
+// accentClass = '' (gold) or 'teal-circ'
+// visible = shown in grid, pinned = always first, hidden = in drawer
 // ============================================================
 const DEFAULT_CIRCUITS = [
-  {id:'pool',      label:'Pool Pump',   icon:'🏊', accentClass:'',         on:true,  visible:true,  pinned:true,  hidden:false},
-  {id:'spa',       label:'Spa Mode',    icon:'♨️',  accentClass:'teal-circ',on:false, visible:true,  pinned:true,  hidden:false},
-  {id:'lights',    label:'Pool Lights', icon:'💡', accentClass:'',         on:true,  visible:true,  pinned:false, hidden:false},
-  {id:'spa_light', label:'Spa Light',   icon:'🕯️',  accentClass:'teal-circ',on:false, visible:true,  pinned:false, hidden:false},
-  {id:'cleaner',   label:'Cleaner',     icon:'🤖', accentClass:'',         on:false, visible:true,  pinned:false, hidden:false},
-  {id:'waterfall', label:'Waterfall',   icon:'💧', accentClass:'teal-circ',on:false, visible:true,  pinned:false, hidden:false},
-  {id:'blower',    label:'Spa Blower',  icon:'💨', accentClass:'',         on:false, visible:true,  pinned:false, hidden:false},
-  {id:'heater_spa',label:'Spa Heater',  icon:'🔥', accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
-  {id:'aux1',      label:'Aux 1',       icon:'⚡', accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
-  {id:'aux2',      label:'Aux 2',       icon:'⚡', accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
-  {id:'aux3',      label:'Aux 3',       icon:'⚡', accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
-  {id:'aux4',      label:'Aux 4',       icon:'⚡', accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
-  {id:'aux5',      label:'Aux 5',       icon:'⚡', accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
-  {id:'aux6',      label:'Aux 6',       icon:'⚡', accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
-  {id:'aux7',      label:'Aux 7',       icon:'⚡', accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
-  {id:'aux8',      label:'Aux 8',       icon:'⚡', accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
-  {id:'freeze',    label:'Freeze Prot.',icon:'❄️',  accentClass:'teal-circ',on:false, visible:false, pinned:false, hidden:true},
-  {id:'solar',     label:'Solar',       icon:'☀️',  accentClass:'',         on:false, visible:false, pinned:false, hidden:true},
+  { id:'pool',       label:'Pool Pump',    icon:'🏊', accentClass:'',          on:true,  visible:true,  pinned:true,  hidden:false },
+  { id:'spa',        label:'Spa Mode',     icon:'♨️',  accentClass:'teal-circ', on:false, visible:true,  pinned:true,  hidden:false },
+  { id:'lights',     label:'Pool Lights',  icon:'💡', accentClass:'',          on:true,  visible:true,  pinned:false, hidden:false },
+  { id:'spa_light',  label:'Spa Light',    icon:'🕯️',  accentClass:'teal-circ', on:false, visible:true,  pinned:false, hidden:false },
+  { id:'cleaner',    label:'Cleaner',      icon:'🤖', accentClass:'',          on:false, visible:true,  pinned:false, hidden:false },
+  { id:'waterfall',  label:'Waterfall',    icon:'💧', accentClass:'teal-circ', on:false, visible:true,  pinned:false, hidden:false },
+  { id:'blower',     label:'Spa Blower',   icon:'💨', accentClass:'',          on:false, visible:true,  pinned:false, hidden:false },
+  { id:'heater_spa', label:'Spa Heater',   icon:'🔥', accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
+  { id:'aux1',       label:'Aux 1',        icon:'⚡', accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
+  { id:'aux2',       label:'Aux 2',        icon:'⚡', accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
+  { id:'aux3',       label:'Aux 3',        icon:'⚡', accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
+  { id:'aux4',       label:'Aux 4',        icon:'⚡', accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
+  { id:'aux5',       label:'Aux 5',        icon:'⚡', accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
+  { id:'aux6',       label:'Aux 6',        icon:'⚡', accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
+  { id:'aux7',       label:'Aux 7',        icon:'⚡', accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
+  { id:'aux8',       label:'Aux 8',        icon:'⚡', accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
+  { id:'freeze',     label:'Freeze Prot.', icon:'❄️',  accentClass:'teal-circ', on:false, visible:false, pinned:false, hidden:true  },
+  { id:'solar',      label:'Solar',        icon:'☀️',  accentClass:'',          on:false, visible:false, pinned:false, hidden:true  },
 ];
 
-let cfg = loadConfig();
+// ============================================================
+// STATE — load from localStorage or use defaults
+// ============================================================
 let circuits = loadCircuits();
-let appState = {
-  customizing: false,
-  spaMode: false,
-  setpoint: 84,
-  pumpRpm: 1850,
-  poolTemp: 82,
-  aqConnected: null,  // null=unknown, true, false
-  haConnected: null,
-  sonos: {
-    playing: false,
-    track: 'Nothing playing',
-    artist: '—',
-    art: null,
-    volume: 45,
-    activeSpeaker: ''
+let customizing = false;
+let spaMode = false;
+let setpoint = 84;
+let pumpRpm = 1850;
+let poolTemp = 82;
+let connected = true;
+
+function loadCircuits() {
+  try {
+    const saved = localStorage.getItem('lazpool_circuits_v2');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Merge saved state with any new circuits added to defaults
+      const merged = DEFAULT_CIRCUITS.map(def => {
+        const found = parsed.find(p => p.id === def.id);
+        return found ? { ...def, ...found } : def;
+      });
+      return merged;
+    }
+  } catch(e) {}
+  return DEFAULT_CIRCUITS.map(c => ({...c}));
+}
+
+function saveCircuits() {
+  try {
+    localStorage.setItem('lazpool_circuits_v2', JSON.stringify(
+      circuits.map(({id,label,icon,accentClass,on,visible,pinned,hidden}) =>
+        ({id,label,icon,accentClass,on,visible,pinned,hidden})
+      )
+    ));
+  } catch(e) {}
+}
+
+// ============================================================
+// RENDER CIRCUITS
+// ============================================================
+function renderCircuits() {
+  const grid = document.getElementById('circuitGrid');
+  grid.innerHTML = '';
+
+  // Sort: pinned first, then by current order
+  const visible = circuits.filter(c => !c.hidden);
+  const pinned = visible.filter(c => c.pinned);
+  const unpinned = visible.filter(c => !c.pinned);
+  const ordered = [...pinned, ...unpinned];
+
+  ordered.forEach((circ, idx) => {
+    const el = document.createElement('div');
+    el.className = `circuit-btn${circ.on ? ' on' : ''}${circ.accentClass ? ' ' + circ.accentClass : ''}${circ.pinned ? ' pinned' : ''}`;
+    el.id = `btn-${circ.id}`;
+    el.dataset.circuitId = circ.id;
+
+    // Find real index in circuits array for reorder
+    const realIdx = circuits.indexOf(circ);
+
+    el.innerHTML = `
+      <div class="pin-badge">📌</div>
+      <div class="circuit-top">
+        <span class="circuit-icon">${circ.icon}</span>
+        <div class="toggle-ring"></div>
+      </div>
+      <div>
+        <div class="circuit-name">${circ.label}</div>
+        <div class="circuit-status" id="status-${circ.id}">${circ.on ? 'Running' : 'Off'}</div>
+      </div>
+      <!-- Edit overlay -->
+      <div class="card-edit-overlay">
+        <div class="edit-circuit-label">Circuit · ${circ.id}</div>
+        <div class="edit-circuit-name" id="edit-name-${circ.id}">${circ.label}</div>
+        <input class="edit-rename-input" id="rename-input-${circ.id}" value="${circ.label}" 
+               onblur="finishRename('${circ.id}')" 
+               onkeydown="if(event.key==='Enter')finishRename('${circ.id}')">
+        <div class="edit-actions">
+          <div class="edit-action-btn pin-btn" onclick="togglePin('${circ.id}')">${circ.pinned ? '📌 Unpin' : '📌 Pin'}</div>
+          <div class="edit-action-btn rename-btn" onclick="startRename('${circ.id}')">✏️ Name</div>
+          <div class="edit-action-btn up-btn" onclick="moveCircuit('${circ.id}',-1)">↑</div>
+          <div class="edit-action-btn down-btn" onclick="moveCircuit('${circ.id}',1)">↓</div>
+          <div class="edit-action-btn hide-btn" onclick="hideCircuit('${circ.id}')">Hide</div>
+        </div>
+      </div>
+    `;
+
+    // Only add toggle listener when not in customize mode
+    el.addEventListener('click', (e) => {
+      if (customizing) return; // edit overlay handles it
+      toggleCircuit(circ.id);
+    });
+
+    grid.appendChild(el);
+  });
+
+  renderHiddenDrawer();
+}
+
+function renderHiddenDrawer() {
+  const hidden = circuits.filter(c => c.hidden);
+  const drawer = document.getElementById('hiddenDrawer');
+  const body = document.getElementById('hiddenDrawerBody');
+  const count = document.getElementById('hiddenCount');
+
+  count.textContent = hidden.length;
+  drawer.style.display = hidden.length > 0 ? 'block' : 'none';
+
+  body.innerHTML = '';
+  hidden.forEach(circ => {
+    const row = document.createElement('div');
+    row.className = 'hidden-circuit-row';
+    row.innerHTML = `
+      <div class="hidden-circuit-info">
+        <div class="hidden-circuit-icon">${circ.icon}</div>
+        <div>
+          <div class="hidden-circuit-name">${circ.label}</div>
+          <div class="hidden-circuit-id">${circ.id}</div>
+        </div>
+      </div>
+      <div class="restore-btn" onclick="restoreCircuit('${circ.id}')">Show</div>
+    `;
+    body.appendChild(row);
+  });
+}
+
+// ============================================================
+// CIRCUIT ACTIONS
+// ============================================================
+function toggleCircuit(id) {
+  const circ = circuits.find(c => c.id === id);
+  if (!circ) return;
+  circ.on = !circ.on;
+  const btn = document.getElementById(`btn-${id}`);
+  const statusEl = document.getElementById(`status-${id}`);
+  if (btn) {
+    btn.classList.toggle('on', circ.on);
+    if (statusEl) statusEl.textContent = circ.on ? 'Running' : 'Off';
   }
+  if (id === 'spa') syncSpaCard(circ.on);
+  if (navigator.vibrate) navigator.vibrate(28);
+  saveCircuits();
+  apiSet(id, circ.on ? 1 : 0);
+}
+
+function togglePin(id) {
+  const circ = circuits.find(c => c.id === id);
+  if (!circ) return;
+  circ.pinned = !circ.pinned;
+  saveCircuits();
+  renderCircuits();
+}
+
+function hideCircuit(id) {
+  const circ = circuits.find(c => c.id === id);
+  if (!circ) return;
+  circ.hidden = true;
+  circ.visible = false;
+  circ.pinned = false;
+  saveCircuits();
+  renderCircuits();
+  if (navigator.vibrate) navigator.vibrate(20);
+}
+
+function restoreCircuit(id) {
+  const circ = circuits.find(c => c.id === id);
+  if (!circ) return;
+  circ.hidden = false;
+  circ.visible = true;
+  saveCircuits();
+  renderCircuits();
+  if (navigator.vibrate) navigator.vibrate(20);
+}
+
+function moveCircuit(id, dir) {
+  const visibleVisible = circuits.filter(c => !c.hidden);
+  const idx = visibleVisible.findIndex(c => c.id === id);
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= visibleVisible.length) return;
+
+  // Swap in main circuits array
+  const realA = circuits.indexOf(visibleVisible[idx]);
+  const realB = circuits.indexOf(visibleVisible[newIdx]);
+  [circuits[realA], circuits[realB]] = [circuits[realB], circuits[realA]];
+  saveCircuits();
+  renderCircuits();
+}
+
+function startRename(id) {
+  const input = document.getElementById(`rename-input-${id}`);
+  const nameEl = document.getElementById(`edit-name-${id}`);
+  if (!input) return;
+  input.classList.add('visible');
+  nameEl.style.display = 'none';
+  input.focus();
+  input.select();
+}
+
+function finishRename(id) {
+  const input = document.getElementById(`rename-input-${id}`);
+  const nameEl = document.getElementById(`edit-name-${id}`);
+  if (!input) return;
+  const newName = input.value.trim();
+  if (newName) {
+    const circ = circuits.find(c => c.id === id);
+    if (circ) circ.label = newName;
+    saveCircuits();
+    renderCircuits(); // re-render to reflect new name everywhere
+  }
+  input.classList.remove('visible');
+  if (nameEl) nameEl.style.display = '';
+}
+
+// ============================================================
+// CUSTOMIZE MODE
+// ============================================================
+function enterCustomize() {
+  customizing = true;
+  document.getElementById('app').classList.add('customizing');
+  document.getElementById('customizeBar').classList.add('visible');
+  // Open hidden drawer for easy restore access
+  const drawer = document.getElementById('hiddenDrawer');
+  drawer.classList.add('open');
+  if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
+}
+
+function exitCustomize() {
+  customizing = false;
+  document.getElementById('app').classList.remove('customizing');
+  document.getElementById('customizeBar').classList.remove('visible');
+  renderCircuits();
+  if (navigator.vibrate) navigator.vibrate(30);
+}
+
+function toggleHiddenDrawer() {
+  document.getElementById('hiddenDrawer').classList.toggle('open');
+}
+
+// ============================================================
+// SPA MODE
+// ============================================================
+function toggleSpaMode() {
+  spaMode = !spaMode;
+  syncSpaCard(spaMode);
+  const circ = circuits.find(c => c.id === 'spa');
+  if (circ) {
+    circ.on = spaMode;
+    saveCircuits();
+    renderCircuits();
+  }
+  if (navigator.vibrate) navigator.vibrate(40);
+}
+
+function syncSpaCard(on) {
+  spaMode = on;
+  const card = document.getElementById('spaCard');
+  const sub = document.getElementById('spaModeStatus');
+  const spaT = document.getElementById('spaTemp');
+  const heaterEl = document.getElementById('heaterState');
+  card.classList.toggle('active', on);
+  sub.textContent = on ? 'Active — Heating to 102°F' : 'Inactive — Tap to activate';
+  if (spaT) spaT.textContent = on ? '98' : '--';
+  if (heaterEl) {
+    heaterEl.textContent = on ? 'Heating' : 'Standby';
+    heaterEl.className = on ? 'heater-state heating' : 'heater-state';
+  }
+}
+
+// ============================================================
+// HEATER SETPOINT
+// ============================================================
+function adjustSetpoint(delta) {
+  setpoint = Math.min(104, Math.max(60, setpoint + delta));
+  document.getElementById('setpointDisplay').innerHTML = `${setpoint} <span>°F</span>`;
+  document.getElementById('poolTarget').textContent = `↑ Target ${setpoint}°`;
+  if (navigator.vibrate) navigator.vibrate(15);
+}
+
+// ============================================================
+// PUMP SPEED
+// ============================================================
+const MIN_RPM = 600, MAX_RPM = 3450;
+const rpmToPct = r => ((r - MIN_RPM) / (MAX_RPM - MIN_RPM)) * 100;
+const pctToRpm = p => Math.round(MIN_RPM + (p / 100) * (MAX_RPM - MIN_RPM));
+
+function setPumpRpm(rpm) {
+  pumpRpm = Math.round(Math.max(MIN_RPM, Math.min(MAX_RPM, rpm)));
+  const pct = rpmToPct(pumpRpm);
+  document.getElementById('pumpRpm').innerHTML = `${pumpRpm} <span>RPM</span>`;
+  document.getElementById('speedFill').style.width = pct + '%';
+  document.getElementById('speedThumb').style.left = pct + '%';
+}
+
+function setPreset(rpm, name) {
+  setPumpRpm(rpm);
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === name));
+  if (navigator.vibrate) navigator.vibrate(20);
+}
+
+let dragging = false;
+let track = null; // assigned in initPumpSlider() after DOM ready
+
+function getTrackPct(clientX) {
+  if (!track) return 0;
+  const r = track.getBoundingClientRect();
+  return Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100));
+}
+
+function initPumpSlider() {
+  track = document.getElementById('speedTrack');
+  if (!track) return;
+  track.addEventListener('mousedown', e => {
+    dragging = true;
+    setPumpRpm(pctToRpm(getTrackPct(e.clientX)));
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  });
+  track.addEventListener('touchstart', e => {
+    dragging = true;
+    setPumpRpm(pctToRpm(getTrackPct(e.touches[0].clientX)));
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  }, { passive: true });
+  document.addEventListener('mousemove', e => { if (dragging) setPumpRpm(pctToRpm(getTrackPct(e.clientX))); });
+  document.addEventListener('touchmove', e => { if (dragging) setPumpRpm(pctToRpm(getTrackPct(e.touches[0].clientX))); }, { passive: true });
+  document.addEventListener('mouseup', () => dragging = false);
+  document.addEventListener('touchend', () => dragging = false);
+}
+
+// ============================================================
+// CLOCK + NAV + MISC
+// ============================================================
+function updateClock() {
+  const now = new Date();
+  const d = now.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+  const t = now.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', second:'2-digit' });
+  document.getElementById('timeClock').textContent = `${d}  ·  ${t}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// setNav replaced by switchPage
+
+// ============================================================
+// CONFIG — stored in localStorage, never hardcoded
+// ============================================================
+const CFG_KEY = 'lazpool_cfg_v1';
+
+const CFG_DEFAULT = {
+  poolName:  'LAZPOOL',
+  panelInfo: 'RS-4 Combo · AquaLink Touch',
+  aqHost:    '',
+  aqPort:    '8080',
+  haHost:    '',
+  haPort:    '8123',
+  haToken:   '',
+  speakers:  []  // [{entityId, name, included}] — populated from HA
 };
 
-// ============================================================
-// PERSISTENCE
-// ============================================================
-function loadConfig() {
+function loadCfg() {
   try {
-    const s = localStorage.getItem(CONFIG_KEY);
-    if (s) return deepMerge(JSON.parse(JSON.stringify(DEFAULT_CONFIG)), JSON.parse(s));
+    const s = localStorage.getItem(CFG_KEY);
+    if (s) return Object.assign({}, CFG_DEFAULT, JSON.parse(s));
   } catch(e) {}
-  return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  return Object.assign({}, CFG_DEFAULT);
 }
 
-function saveConfig() {
-  try { localStorage.setItem(CONFIG_KEY, JSON.stringify(cfg)); } catch(e) {}
+function saveCfg(c) {
+  try { localStorage.setItem(CFG_KEY, JSON.stringify(c)); } catch(e) {}
 }
 
-function deepMerge(target, source) {
-  for (const k in source) {
-    if (source[k] && typeof source[k] === 'object' && !Array.isArray(source[k])) {
-      target[k] = deepMerge(target[k] || {}, source[k]);
+// Singleton — loaded once at startup
+const cfg = loadCfg();
+
+// ============================================================
+// SETTINGS — populate form fields from cfg
+// ============================================================
+function populateSettings() {
+  document.getElementById('cfg-aq-host').value   = cfg.aqHost || '';
+  document.getElementById('cfg-aq-port').value   = cfg.aqPort || '8080';
+  document.getElementById('cfg-ha-host').value   = cfg.haHost || '';
+  document.getElementById('cfg-ha-port').value   = cfg.haPort || '8123';
+  document.getElementById('cfg-ha-token').value  = cfg.haToken || '';
+  document.getElementById('cfg-pool-name').value = cfg.poolName || 'LAZPOOL';
+  document.getElementById('cfg-panel-info').value = cfg.panelInfo || '';
+}
+
+function saveAqualinkd() {
+  cfg.aqHost = document.getElementById('cfg-aq-host').value.trim();
+  cfg.aqPort = document.getElementById('cfg-aq-port').value.trim() || '8080';
+  saveCfg(cfg);
+  showToast('AqualinkD saved');
+  applyIdentity();
+}
+
+function saveHomeAssistant() {
+  cfg.haHost  = document.getElementById('cfg-ha-host').value.trim();
+  cfg.haPort  = document.getElementById('cfg-ha-port').value.trim() || '8123';
+  cfg.haToken = document.getElementById('cfg-ha-token').value.trim();
+  saveCfg(cfg);
+  showToast('Home Assistant saved');
+  // Connect WebSocket with new credentials
+  if (haWS) { haWS.onclose = null; haWS.close(); haWS = null; }
+  haWSMsgId = 1;
+  haWSConnect();
+  renderSonos();
+}
+
+function saveIdentity() {
+  cfg.poolName  = document.getElementById('cfg-pool-name').value.trim() || 'LAZPOOL';
+  cfg.panelInfo = document.getElementById('cfg-panel-info').value.trim();
+  saveCfg(cfg);
+  applyIdentity();
+  showToast('Identity saved');
+}
+
+function applyIdentity() {
+  const nm = cfg.poolName || 'LAZPOOL';
+  const pi = cfg.panelInfo || '';
+  // Wordmark — keep LAZ gold if name starts with LAZ
+  const wm = document.getElementById('headerWordmark');
+  if (wm) {
+    if (nm.startsWith('LAZ')) {
+      wm.innerHTML = 'LAZ<span>' + nm.slice(3) + '</span>';
     } else {
-      target[k] = source[k];
+      wm.innerHTML = '<span>' + nm + '</span>';
     }
   }
-  return target;
-}
-
-function isFirstRun() {
-  return !localStorage.getItem(CONFIG_KEY);
+  const hs = document.getElementById('headerSub');
+  if (hs) hs.textContent = pi;
+  document.title = nm;
 }
 
 // ============================================================
@@ -886,26 +1298,24 @@ function isFirstRun() {
 function exportConfig() {
   const bundle = {
     _lazpool: true,
-    _version: APP_VERSION,
+    _version: '2.0',
     _exported: new Date().toISOString(),
-    config: cfg,
+    cfg: cfg,
     circuits: circuits.map(({id,label,icon,accentClass,on,visible,pinned,hidden}) =>
-      ({id,label,icon,accentClass,on,visible,pinned,hidden})
-    )
+      ({id,label,icon,accentClass,on,visible,pinned,hidden}))
   };
   const blob = new Blob([JSON.stringify(bundle, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  const name = (cfg.identity.poolName || 'LAZPOOL').replace(/\s+/g,'_');
   a.href = url;
-  a.download = `${name}_config_${new Date().toISOString().slice(0,10)}.json`;
+  a.download = (cfg.poolName||'LAZPOOL').replace(/\s+/g,'_') + '_config_' + new Date().toISOString().slice(0,10) + '.json';
   a.click();
   URL.revokeObjectURL(url);
-  showToast('Config exported ✓');
+  showToast('Config exported');
 }
 
 function triggerImport() {
-  document.getElementById('importFileInput').click();
+  document.getElementById('importInput').click();
 }
 
 function importConfig(input) {
@@ -915,19 +1325,22 @@ function importConfig(input) {
   reader.onload = e => {
     try {
       const bundle = JSON.parse(e.target.result);
-      if (!bundle._lazpool) { showToast('Not a valid LAZPOOL config file', 'err'); return; }
-      if (bundle.config) {
-        cfg = deepMerge(JSON.parse(JSON.stringify(DEFAULT_CONFIG)), bundle.config);
-        saveConfig();
+      if (!bundle._lazpool) { showToast('Not a LAZPOOL config file', 'err'); return; }
+      if (bundle.cfg) {
+        Object.assign(cfg, bundle.cfg);
+        saveCfg(cfg);
       }
       if (bundle.circuits && Array.isArray(bundle.circuits)) {
-        circuits = bundle.circuits;
+        bundle.circuits.forEach(saved => {
+          const c = circuits.find(x => x.id === saved.id);
+          if (c) Object.assign(c, saved);
+        });
         saveCircuits();
       }
-      applyConfig();
+      applyIdentity();
+      populateSettings();
       renderCircuits();
-      renderSonos();
-      showToast('Config imported ✓ — welcome back!', 'ok');
+      showToast('Config imported ✓');
     } catch(err) {
       showToast('Import failed — invalid file', 'err');
     }
@@ -937,529 +1350,551 @@ function importConfig(input) {
 }
 
 function confirmReset() {
-  openModal('reset');
-}
-
-function doReset() {
-  localStorage.removeItem(CONFIG_KEY);
-  localStorage.removeItem(CIRCUITS_KEY);
-  location.reload();
+  if (confirm('Reset all settings? This cannot be undone.')) {
+    localStorage.removeItem(CFG_KEY);
+    localStorage.removeItem('lazpool_circuits_v2');
+    location.reload();
+  }
 }
 
 // ============================================================
 // TOAST
 // ============================================================
-function showToast(msg, type='ok') {
+function showToast(msg, type) {
   const existing = document.getElementById('lazToast');
   if (existing) existing.remove();
   const t = document.createElement('div');
   t.id = 'lazToast';
-  const color = type==='err' ? 'var(--red)' : type==='warn' ? 'var(--gold)' : 'var(--teal)';
-  const bg = type==='err' ? 'var(--red-dim)' : type==='warn' ? 'var(--gold-dim)' : 'var(--teal-dim)';
-  t.style.cssText = `position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:600;
-    background:${bg};border:1px solid ${color};border-radius:20px;
-    padding:9px 18px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;
-    color:${color};text-transform:uppercase;white-space:nowrap;
-    animation:fadeIn .2s ease both;max-width:90vw;text-align:center`;
+  const color = type === 'err' ? 'var(--red)' : 'var(--teal)';
+  const bg    = type === 'err' ? 'var(--red-dim)' : 'var(--teal-dim)';
+  t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:600;' +
+    'background:' + bg + ';border:1px solid ' + color + ';border-radius:20px;' +
+    'padding:9px 18px;font-family:DM Mono,monospace;font-size:10px;letter-spacing:.12em;' +
+    'color:' + color + ';text-transform:uppercase;white-space:nowrap;max-width:90vw;text-align:center;animation:fadeUp .2s ease both';
   t.textContent = msg;
   document.body.appendChild(t);
-  setTimeout(()=>{ t.style.transition='opacity .4s'; t.style.opacity='0'; setTimeout(()=>t.remove(),400); }, 2800);
+  setTimeout(() => { t.style.transition='opacity .4s'; t.style.opacity='0'; setTimeout(()=>t.remove(),400); }, 2800);
 }
 
 // ============================================================
-// APPLY CONFIG TO UI
+// PAGE NAVIGATION
 // ============================================================
-function applyConfig() {
-  // Identity
-  const pn = cfg.identity.poolName || 'LAZPOOL';
-  const pi = cfg.identity.panelInfo || '';
-  document.getElementById('headerWordmark').innerHTML = pn.includes('LAZ')
-    ? pn.replace('LAZ','LAZ<span>').replace(/$/,'</span>')
-    : `<span>${pn}</span>`;
-  document.getElementById('headerSub').textContent = pi;
-  document.title = pn;
-  document.getElementById('loadingSub').textContent = pi || 'Initializing';
-
-  // Settings display values
-  const aqHost = cfg.aqualinkd.host;
-  document.getElementById('aq-display').textContent = aqHost
-    ? `${aqHost}:${cfg.aqualinkd.port}` : 'Not configured';
-  document.getElementById('aq-display').className = 'settings-row-value' + (aqHost ? ' connected' : '');
-
-  const haHost = cfg.homeassistant.host;
-  document.getElementById('ha-display').textContent = haHost
-    ? `${haHost}:${cfg.homeassistant.port}` : 'Not configured';
-  document.getElementById('ha-display').className = 'settings-row-value' + (haHost ? ' connected' : '');
-
-  document.getElementById('sonos-display').textContent =
-    cfg.sonos.speakers.length ? `${cfg.sonos.speakers.length} speaker${cfg.sonos.speakers.length>1?'s':''}` : 'Not configured';
-  document.getElementById('favs-display').textContent =
-    `${cfg.sonos.favorites.length} favorite${cfg.sonos.favorites.length!==1?'s':''}`;
-
-  document.getElementById('identity-display').textContent = pn;
-
-  // Sonos active speaker default
-  if (!appState.sonos.activeSpeaker && cfg.sonos.speakers.length) {
-    appState.sonos.activeSpeaker = cfg.sonos.speakers[0].entityId;
-  }
-  appState.sonos.volume = cfg.sonos.volume || 45;
+function switchPage(name, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  // Populate settings fields whenever settings tab opens
+  if (name === 'settings') populateSettings();
+  // Re-render sonos panel when returning to control tab
+  if (name === 'control') renderSonos();
+  window.scrollTo(0, 0);
 }
+
 
 // ============================================================
-// WIZARD
+// SPEAKER PICKER — loads media_player entities from HA,
+// renders as a tap-to-select checklist. No entity ID typing needed.
 // ============================================================
-function showWizard() {
-  document.getElementById('wizardOverlay').classList.add('visible');
-}
+async function loadSpeakers() {
+  const note   = document.getElementById('speaker-note');
+  const picker = document.getElementById('speakerPicker');
+  note.textContent = 'Loading from Home Assistant…';
+  picker.innerHTML = '';
 
-function hideWizard() {
-  document.getElementById('wizardOverlay').classList.remove('visible');
-}
-
-function skipWizard() {
-  hideWizard();
-  showToast('Configure connections anytime in Settings ⚙️', 'warn');
-}
-
-function saveWizard() {
-  cfg.identity.poolName  = document.getElementById('wiz-pool-name').value.trim() || 'LAZPOOL';
-  cfg.identity.panelInfo = document.getElementById('wiz-panel-info').value.trim() || 'RS-4 Combo · AquaLink Touch';
-  cfg.aqualinkd.host     = document.getElementById('wiz-aq-host').value.trim();
-  cfg.aqualinkd.port     = document.getElementById('wiz-aq-port').value.trim() || '8080';
-  cfg.homeassistant.host  = document.getElementById('wiz-ha-host').value.trim();
-  cfg.homeassistant.port  = document.getElementById('wiz-ha-port').value.trim() || '8123';
-  cfg.homeassistant.token = document.getElementById('wiz-ha-token').value.trim();
-  saveConfig();
-  hideWizard();
-  applyConfig();
-  renderSonos();
-  showToast('Setup complete — welcome to LAZPOOL', 'ok');
-}
-
-// ============================================================
-// MODAL SYSTEM
-// ============================================================
-function openModal(type) {
-  const backdrop = document.getElementById('modalBackdrop');
-  const title    = document.getElementById('modalTitle');
-  const sub      = document.getElementById('modalSub');
-  const body     = document.getElementById('modalBody');
-  const actions  = document.getElementById('modalActions');
-
-  // Clear
-  body.innerHTML = '';
-  actions.innerHTML = '';
-  sub.textContent = '';
-
-  if (type === 'aqualinkd') {
-    title.innerHTML = 'AqualinkD <span>Server</span>';
-    sub.textContent = 'Pool controller · Local network';
-    body.innerHTML = `
-      <div class="field-group">
-        <div class="field-row">
-          <div class="field"><div class="field-label">IP Address</div>
-            <input class="field-input" id="m-aq-host" value="${cfg.aqualinkd.host}" placeholder="192.168.1.100" inputmode="url"></div>
-          <div class="field"><div class="field-label">Port</div>
-            <input class="field-input" id="m-aq-port" value="${cfg.aqualinkd.port}" placeholder="8080" type="number"></div>
-        </div>
-        <div id="m-aq-test-result"></div>
-      </div>`;
-    actions.innerHTML = `
-      <div class="modal-btn cancel" onclick="closeModal()">Cancel</div>
-      <div class="modal-btn confirm" onclick="saveAqualinkd()">Save</div>`;
-  }
-  else if (type === 'homeassistant') {
-    title.innerHTML = 'Home <span>Assistant</span>';
-    sub.textContent = 'Sonos & smart home bridge';
-    body.innerHTML = `
-      <div class="field-group">
-        <div class="field-row">
-          <div class="field"><div class="field-label">IP Address</div>
-            <input class="field-input teal" id="m-ha-host" value="${cfg.homeassistant.host}" placeholder="192.168.1.100" inputmode="url"></div>
-          <div class="field"><div class="field-label">Port</div>
-            <input class="field-input teal" id="m-ha-port" value="${cfg.homeassistant.port}" placeholder="8123" type="number"></div>
-        </div>
-        <div class="field"><div class="field-label">Long-Lived Access Token</div>
-          <input class="field-input teal" id="m-ha-token" value="${cfg.homeassistant.token}" placeholder="Paste HA token" type="password"></div>
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:.1em;line-height:1.5">Generate in HA → Profile → Security → Long-Lived Access Tokens</div>
-        <div id="m-ha-test-result"></div>
-      </div>`;
-    actions.innerHTML = `
-      <div class="modal-btn cancel" onclick="closeModal()">Cancel</div>
-      <div class="modal-btn confirm teal" onclick="saveHomeAssistant()">Save</div>`;
-  }
-  else if (type === 'sonos-speakers') {
-    title.innerHTML = 'Sonos <span>Speakers</span>';
-    sub.textContent = 'HA entity IDs for each speaker';
-    const rows = cfg.sonos.speakers.map((s,i) => `
-      <div class="field-row" style="margin-bottom:8px">
-        <div class="field"><div class="field-label">Entity ID</div>
-          <input class="field-input" id="spk-entity-${i}" value="${s.entityId}" placeholder="media_player.outdoor"></div>
-        <div class="field"><div class="field-label">Name</div>
-          <input class="field-input" id="spk-name-${i}" value="${s.name}" placeholder="Outdoor"></div>
-      </div>`).join('');
-    body.innerHTML = `
-      <div id="spk-list">${rows}</div>
-      <button class="settings-action-btn teal" onclick="addSpeakerRow()" style="margin-top:8px">+ Add Speaker</button>
-      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:.1em;line-height:1.5;margin-top:12px">Find entity IDs in HA → Developer Tools → States → filter by media_player</div>`;
-    actions.innerHTML = `
-      <div class="modal-btn cancel" onclick="closeModal()">Cancel</div>
-      <div class="modal-btn confirm teal" onclick="saveSpeakers()">Save</div>`;
-  }
-  else if (type === 'sonos-favs') {
-    title.innerHTML = 'Music <span>Favorites</span>';
-    sub.textContent = 'Quick-launch playlists & stations';
-    const rows = cfg.sonos.favorites.map((f,i) => `
-      <div class="field-row" style="margin-bottom:8px">
-        <div class="field"><div class="field-label">Label</div>
-          <input class="field-input" id="fav-label-${i}" value="${f.label}" placeholder="Pool Vibes"></div>
-        <div class="field"><div class="field-label">Content ID</div>
-          <input class="field-input" id="fav-id-${i}" value="${f.contentId}" placeholder="FV:2/1"></div>
-      </div>`).join('');
-    body.innerHTML = `
-      <div id="fav-list">${rows}</div>
-      <button class="settings-action-btn teal" onclick="addFavRow()" style="margin-top:8px">+ Add Favorite</button>
-      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:.1em;line-height:1.5;margin-top:12px">Find Content IDs in HA Developer Tools → Actions → media_player.browse_media. Type: favorite_item_id</div>`;
-    actions.innerHTML = `
-      <div class="modal-btn cancel" onclick="closeModal()">Cancel</div>
-      <div class="modal-btn confirm teal" onclick="saveFavorites()">Save</div>`;
-  }
-  else if (type === 'identity') {
-    title.innerHTML = 'Pool <span>Identity</span>';
-    sub.textContent = 'Displayed in header';
-    body.innerHTML = `
-      <div class="field-group">
-        <div class="field"><div class="field-label">Pool Name</div>
-          <input class="field-input" id="m-pool-name" value="${cfg.identity.poolName}" placeholder="LAZPOOL"></div>
-        <div class="field"><div class="field-label">Panel Info (subtitle)</div>
-          <input class="field-input" id="m-panel-info" value="${cfg.identity.panelInfo}" placeholder="RS-4 Combo · REV T.2"></div>
-      </div>`;
-    actions.innerHTML = `
-      <div class="modal-btn cancel" onclick="closeModal()">Cancel</div>
-      <div class="modal-btn confirm" onclick="saveIdentity()">Save</div>`;
-  }
-  else if (type === 'reset') {
-    title.innerHTML = 'Reset <span>All Settings</span>';
-    sub.textContent = 'This cannot be undone';
-    body.innerHTML = `<div style="font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text-secondary);line-height:1.6">This will clear all connections, circuit layouts, speaker settings, and favorites. The app will restart in setup mode.<br><br>Export your config first if you want to keep it.</div>`;
-    actions.innerHTML = `
-      <div class="modal-btn cancel" onclick="closeModal()">Cancel</div>
-      <div class="modal-btn confirm red" onclick="doReset()">Reset Everything</div>`;
-  }
-  else if (type === 'connection') {
-    const aqOk = appState.aqConnected;
-    const haOk = appState.haConnected;
-    title.innerHTML = 'Connection <span>Status</span>';
-    sub.textContent = 'Live system checks';
-    body.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div class="conn-status-badge ${aqOk===true?'ok':aqOk===false?'err':'testing'}">
-          <div class="conn-dot"></div>
-          AqualinkD: ${aqOk===true?'Connected':aqOk===false?'Unreachable':'Not tested'}
-          <span style="margin-left:auto;opacity:.6">${cfg.aqualinkd.host||'—'}</span>
-        </div>
-        <div class="conn-status-badge ${haOk===true?'ok':haOk===false?'err':'testing'}">
-          <div class="conn-dot"></div>
-          Home Assistant: ${haOk===true?'Connected':haOk===false?'Unreachable':'Not tested'}
-          <span style="margin-left:auto;opacity:.6">${cfg.homeassistant.host||'—'}</span>
-        </div>
-      </div>
-      <button class="settings-action-btn teal" onclick="testBoth()" style="margin-top:14px">Test Both Connections</button>`;
-    actions.innerHTML = `<div class="modal-btn cancel" style="flex:1" onclick="closeModal()">Close</div>`;
+  const base = haBase();
+  if (!base || !cfg.haToken) {
+    note.textContent = 'Save your HA IP + token first, then tap Load.';
+    return;
   }
 
-  backdrop.classList.add('visible');
+  try {
+    const r = await fetch(base + '/states', {
+      headers: { 'Authorization': 'Bearer ' + cfg.haToken },
+      signal: AbortSignal.timeout(8000)
+    });
+    if (!r.ok) {
+      note.textContent = 'HA error ' + r.status + ' — check your token.';
+      return;
+    }
+
+    const states = await r.json();
+
+    // All media_player entities — speakers, TVs, etc
+    window._haStates = states; // cache for speaker lookups
+    const players = states.filter(e => e.entity_id.startsWith('media_player.'));
+
+    if (players.length === 0) {
+      note.textContent = 'No media_player entities found in HA.';
+      return;
+    }
+
+    note.textContent = players.length + ' player' + (players.length !== 1 ? 's' : '') + ' found — tap to include:';
+
+    const saved = cfg.speakers || [];
+    window._availablePlayers = players.map(p => {
+      const prev = saved.find(s => s.entityId === p.entity_id);
+      // Pull source_list — HA exposes available inputs/playlists per player
+      const sources = p.attributes.source_list || [];
+      return {
+        entityId: p.entity_id,
+        name: p.attributes.friendly_name
+              || p.entity_id.replace('media_player.', '').replace(/_/g, ' ')
+                            .replace(/\b\w/g, c => c.toUpperCase()),
+        state:    p.state,
+        sources:  sources,
+        included: prev ? prev.included : false,
+        isMA: p.attributes.mass_player_id !== undefined
+              || p.entity_id.includes('_mass')
+              || p.entity_id.startsWith('media_player.ma_')
+      };
+    });
+
+    renderSpeakerPicker();
+    document.getElementById('speaker-save-row').style.display = 'block';
+  } catch(e) {
+    note.textContent = 'Connection failed. Is start.bat running? Check HA IP.';
+    console.warn('[HA] loadSpeakers:', e.message);
+  }
 }
 
-function closeModal(e) {
-  if (e && e.target !== document.getElementById('modalBackdrop')) return;
-  document.getElementById('modalBackdrop').classList.remove('visible');
-}
-function closeModalDirect() {
-  document.getElementById('modalBackdrop').classList.remove('visible');
-}
+function renderSpeakerPicker() {
+  const picker = document.getElementById('speakerPicker');
+  const players = window._availablePlayers || [];
+  picker.innerHTML = '';
 
-function showConnectionModal() { openModal('connection'); }
+  // Sort: MA players first (have mass_player_id), then by name
+  const sorted = [...players].sort((a, b) => {
+    if (a.isMA && !b.isMA) return -1;
+    if (!a.isMA && b.isMA) return 1;
+    return a.name.localeCompare(b.name);
+  });
 
-// Modal save handlers
-function saveAqualinkd() {
-  cfg.aqualinkd.host = document.getElementById('m-aq-host').value.trim();
-  cfg.aqualinkd.port = document.getElementById('m-aq-port').value.trim() || '8080';
-  saveConfig(); applyConfig(); closeModalDirect(); showToast('AqualinkD config saved');
-}
-
-function saveHomeAssistant() {
-  cfg.homeassistant.host  = document.getElementById('m-ha-host').value.trim();
-  cfg.homeassistant.port  = document.getElementById('m-ha-port').value.trim() || '8123';
-  cfg.homeassistant.token = document.getElementById('m-ha-token').value.trim();
-  saveConfig(); applyConfig(); renderSonos(); closeModalDirect(); showToast('HA config saved');
-}
-
-function saveIdentity() {
-  cfg.identity.poolName  = document.getElementById('m-pool-name').value.trim() || 'LAZPOOL';
-  cfg.identity.panelInfo = document.getElementById('m-panel-info').value.trim();
-  saveConfig(); applyConfig(); closeModalDirect(); showToast('Identity updated');
-}
-
-// Dynamic speaker rows
-let _tmpSpeakerCount = 0;
-function addSpeakerRow() {
-  const i = Date.now();
-  const row = document.createElement('div');
-  row.className = 'field-row'; row.style.marginBottom = '8px';
-  row.innerHTML = `
-    <div class="field"><div class="field-label">Entity ID</div>
-      <input class="field-input" id="spk-entity-${i}" placeholder="media_player.outdoor"></div>
-    <div class="field"><div class="field-label">Name</div>
-      <input class="field-input" id="spk-name-${i}" placeholder="Outdoor"></div>`;
-  document.getElementById('spk-list').appendChild(row);
-  _tmpSpeakerCount = i;
+  let lastGroup = null;
+  sorted.forEach(p => {
+    const group = p.isMA ? 'Music Assistant' : 'Other';
+    if (group !== lastGroup) {
+      const hdr = document.createElement('div');
+      hdr.style.cssText = 'font-family:DM Mono,monospace;font-size:9px;letter-spacing:.22em;' +
+        'text-transform:uppercase;color:' + (p.isMA ? 'var(--teal)' : 'var(--text-muted)') +
+        ';padding:8px 2px 4px;';
+      hdr.textContent = group;
+      picker.appendChild(hdr);
+      lastGroup = group;
+    }
+    const row = document.createElement('div');
+    row.className = 'speaker-pick-row' + (p.included ? ' selected' : '');
+    const badge = p.isMA ? ' <span style="font-size:9px;opacity:.6">· MA</span>' : '';
+    row.innerHTML =
+      '<div class="speaker-pick-info">' +
+        '<div class="speaker-pick-name">' + p.name + badge + '</div>' +
+        '<div class="speaker-pick-entity">' + p.entityId + ' · ' + p.state + '</div>' +
+      '</div>' +
+      '<div class="speaker-pick-check">✓</div>';
+    row.onclick = () => {
+      p.included = !p.included;
+      row.classList.toggle('selected', p.included);
+      if (navigator.vibrate) navigator.vibrate(20);
+    };
+    picker.appendChild(row);
+  });
 }
 
 function saveSpeakers() {
-  const inputs = document.getElementById('spk-list').querySelectorAll('.field-row');
-  cfg.sonos.speakers = [];
-  inputs.forEach(row => {
-    const eId = row.querySelector('[id^="spk-entity"]');
-    const nm  = row.querySelector('[id^="spk-name"]');
-    if (eId && eId.value.trim()) {
-      cfg.sonos.speakers.push({ entityId: eId.value.trim(), name: nm?.value.trim() || eId.value.trim().replace('media_player.','') });
-    }
-  });
-  saveConfig(); applyConfig(); renderSonos(); closeModalDirect();
-  showToast(`${cfg.sonos.speakers.length} speaker${cfg.sonos.speakers.length!==1?'s':''} saved`);
-}
-
-function addFavRow() {
-  const i = Date.now();
-  const row = document.createElement('div');
-  row.className = 'field-row'; row.style.marginBottom = '8px';
-  row.innerHTML = `
-    <div class="field"><div class="field-label">Label</div>
-      <input class="field-input" id="fav-label-${i}" placeholder="Pool Vibes"></div>
-    <div class="field"><div class="field-label">Content ID</div>
-      <input class="field-input" id="fav-id-${i}" placeholder="FV:2/1"></div>`;
-  document.getElementById('fav-list').appendChild(row);
-}
-
-function saveFavorites() {
-  const inputs = document.getElementById('fav-list').querySelectorAll('.field-row');
-  cfg.sonos.favorites = [];
-  inputs.forEach(row => {
-    const lbl = row.querySelector('[id^="fav-label"]');
-    const cid = row.querySelector('[id^="fav-id"]');
-    if (lbl && lbl.value.trim()) {
-      cfg.sonos.favorites.push({ label: lbl.value.trim(), contentId: cid?.value.trim() || '', contentType: 'favorite_item_id' });
-    }
-  });
-  saveConfig(); applyConfig(); renderSonos(); closeModalDirect();
-  showToast(`${cfg.sonos.favorites.length} favorite${cfg.sonos.favorites.length!==1?'s':''} saved`);
+  const players = window._availablePlayers || [];
+  cfg.speakers = players.map(p => ({
+    entityId: p.entityId,
+    name:     p.name,
+    included: p.included,
+    sources:  p.sources || []
+  }));
+  saveCfg(cfg);
+  renderSonos(); // update dashboard immediately
+  const n = cfg.speakers.filter(s => s.included).length;
+  showToast(n + ' speaker' + (n !== 1 ? 's' : '') + ' saved');
 }
 
 // ============================================================
-// CONNECTION TESTS
+// AQUALINKD API
 // ============================================================
-async function testAqualinkd() {
-  if (!cfg.aqualinkd.host) { showToast('Enter AqualinkD IP first', 'warn'); return; }
-  document.getElementById('aq-conn-status').textContent = 'Testing…';
+function aqBase() {
+  const host = (cfg.aqHost || '').replace(/\/$/, '');
+  const port = cfg.aqPort || '8080';
+  return host ? 'http://' + host + ':' + port : null;
+}
+
+async function apiGet(endpoint) {
+  const base = aqBase();
+  if (!base) return null;
   try {
-    const r = await fetch(`http://${cfg.aqualinkd.host}:${cfg.aqualinkd.port}/api/status`, {signal: AbortSignal.timeout(4000)});
-    appState.aqConnected = r.ok;
-    document.getElementById('aq-conn-status').textContent = r.ok ? 'Connected ✓' : 'Error';
-    document.getElementById('aq-conn-status').className = 'settings-row-value ' + (r.ok ? 'connected' : 'error');
-    showToast(r.ok ? 'AqualinkD connected ✓' : 'AqualinkD error', r.ok ? 'ok' : 'err');
-  } catch(e) {
-    appState.aqConnected = false;
-    document.getElementById('aq-conn-status').textContent = 'Unreachable';
-    document.getElementById('aq-conn-status').className = 'settings-row-value error';
-    showToast('AqualinkD unreachable', 'err');
+    const r = await fetch(base + '/api/' + endpoint, {signal: AbortSignal.timeout(4000)});
+    setConnectionState(r.ok);
+    return r.ok ? await r.json() : null;
+  } catch(e) { setConnectionState(false); return null; }
+}
+
+async function apiSet(id, value) {
+  const base = aqBase();
+  if (!base) { console.log('[DEMO] SET ' + id + '=' + value); return; }
+  try {
+    await fetch(base + '/api/' + id + '/' + value, {method:'GET', signal: AbortSignal.timeout(4000)});
+    setConnectionState(true);
+  } catch(e) { setConnectionState(false); }
+}
+
+async function testAqualinkd() {
+  const el = document.getElementById('aq-test-result');
+  el.innerHTML = '<div class="conn-badge testing"><div class="conn-dot"></div>Testing…</div>';
+  const base = aqBase();
+  if (!base) {
+    el.innerHTML = '<div class="conn-badge err"><div class="conn-dot"></div>Enter IP address first</div>';
+    return;
   }
-  updateConnectionPill();
+  try {
+    const r = await fetch(base + '/api/status', {signal: AbortSignal.timeout(5000)});
+    setConnectionState(r.ok);
+    el.innerHTML = r.ok
+      ? '<div class="conn-badge ok"><div class="conn-dot"></div>Connected ✓</div>'
+      : '<div class="conn-badge err"><div class="conn-dot"></div>Error ' + r.status + '</div>';
+  } catch(e) {
+    setConnectionState(false);
+    el.innerHTML = '<div class="conn-badge err"><div class="conn-dot"></div>Unreachable — check IP and AqualinkD</div>';
+  }
+}
+
+// ============================================================
+// HOME ASSISTANT API
+// ── In local mode (start.bat) requests go through the CORS proxy
+//    on port 3001. The proxy forwards to HA and adds CORS headers.
+//    No config file needed — token travels in the request header.
+// ── If not using local serve, enter HA IP/token and HA must have
+//    cors_allowed_origins configured for your app URL.
+// ============================================================
+function haBase() {
+  const host = (cfg.haHost || '').replace(/\/$/, '').replace(/^https?:\/\//, '');
+  const port = cfg.haPort || '8123';
+  if (!host) return null;
+  // Detect if running via local server.py (same host, port 3000)
+  // Route through CORS proxy on port 3001 to avoid browser CORS block
+  if (window.location.port === '3000' || window.location.hostname === 'localhost') {
+    return 'http://localhost:3001/proxy/' + host + ':' + port + '/api';
+  }
+  // Direct — HA must allow this origin via cors_allowed_origins
+  return 'http://' + host + ':' + port + '/api';
 }
 
 async function testHomeAssistant() {
-  if (!cfg.homeassistant.host || !cfg.homeassistant.token) { showToast('Enter HA host and token first', 'warn'); return; }
-  document.getElementById('ha-conn-status').textContent = 'Testing…';
-  try {
-    const r = await fetch(`http://${cfg.homeassistant.host}:${cfg.homeassistant.port}/api/`, {
-      headers: { Authorization: `Bearer ${cfg.homeassistant.token}` },
-      signal: AbortSignal.timeout(4000)
-    });
-    appState.haConnected = r.ok;
-    document.getElementById('ha-conn-status').textContent = r.ok ? 'Connected ✓' : 'Auth error';
-    document.getElementById('ha-conn-status').className = 'settings-row-value ' + (r.ok ? 'connected' : 'error');
-    showToast(r.ok ? 'Home Assistant connected ✓' : 'HA auth error', r.ok ? 'ok' : 'err');
-    if (r.ok) fetchSonosState();
-  } catch(e) {
-    appState.haConnected = false;
-    document.getElementById('ha-conn-status').textContent = 'Unreachable';
-    document.getElementById('ha-conn-status').className = 'settings-row-value error';
-    showToast('Home Assistant unreachable', 'err');
+  const el = document.getElementById('ha-test-result');
+  el.innerHTML = '<div class="conn-badge testing"><div class="conn-dot"></div>Testing…</div>';
+  const base = haBase();
+  if (!base) {
+    el.innerHTML = '<div class="conn-badge err"><div class="conn-dot"></div>Enter HA IP address first</div>';
+    return;
   }
-  updateConnectionPill();
+  try {
+    const r = await fetch(base + '/', {
+      headers: {'Authorization': 'Bearer ' + cfg.haToken},
+      signal: AbortSignal.timeout(5000)
+    });
+    el.innerHTML = r.ok
+      ? '<div class="conn-badge ok"><div class="conn-dot"></div>Connected ✓</div>'
+      : '<div class="conn-badge err"><div class="conn-dot"></div>Error ' + r.status + ' — check token</div>';
+  } catch(e) {
+    el.innerHTML = '<div class="conn-badge err"><div class="conn-dot"></div>Unreachable — use start.bat for local proxy</div>';
+  }
 }
 
-async function testBoth() { await testAqualinkd(); await testHomeAssistant(); }
-
-function updateConnectionPill() {
+function setConnectionState(online) {
+  connected = online;
   const dot  = document.getElementById('statusDot');
   const text = document.getElementById('statusText');
   const pill = document.getElementById('connectionPill');
-  const aqOk = appState.aqConnected;
-  const haOk = appState.haConnected;
-  const noConfig = !cfg.aqualinkd.host;
+  dot.classList.toggle('offline', !online);
+  text.textContent = online ? 'LIVE' : (aqBase() ? 'OFFLINE' : 'DEMO');
+  pill.style.borderColor = online ? 'var(--border-teal)' : (aqBase() ? 'rgba(224,92,92,.3)' : 'var(--border-active)');
+  pill.style.color = online ? 'var(--teal)' : (aqBase() ? 'var(--red)' : 'var(--gold)');
+}
 
-  if (noConfig) {
-    dot.className = 'status-dot warn';
-    text.textContent = 'DEMO';
-    pill.style.cssText = 'background:var(--gold-dim);border-color:var(--border-active);color:var(--gold)';
-  } else if (aqOk === true) {
-    dot.className = 'status-dot';
-    text.textContent = 'LIVE';
-    pill.style.cssText = '';
-  } else if (aqOk === false) {
-    dot.className = 'status-dot offline';
-    text.textContent = 'OFFLINE';
-    pill.style.cssText = 'background:var(--red-dim);border-color:rgba(224,92,92,.3);color:var(--red)';
-  } else {
-    dot.className = 'status-dot warn';
-    text.textContent = 'DEMO';
-    pill.style.cssText = 'background:var(--gold-dim);border-color:var(--border-active);color:var(--gold)';
+async function pollStatus() {
+  const data = await apiGet('status');
+  if (!data) return;
+  // TODO: map data.pool_pump, data.pool_temp, data.pump_rpm etc
+}
+setInterval(pollStatus, 5000);
+
+// Gentle temp drift in demo mode
+setInterval(() => {
+  if (connected || aqBase()) return;
+  if (Math.random() > .7) {
+    poolTemp = Math.round((poolTemp + (Math.random()-.5)*.2)*10)/10;
+    document.getElementById('poolTemp').innerHTML = Math.round(poolTemp) + '<sup>°F</sup>';
   }
-}
+}, 6000);
+
 
 // ============================================================
-// SONOS — HA REST API
+// MUSIC — Music Assistant via HA services
+// Library browsing uses music_assistant.get_library (no speaker needed)
+// Playback uses music_assistant.play_media targeting selected speaker
 // ============================================================
-function haHeaders() {
-  return { 'Authorization': `Bearer ${cfg.homeassistant.token}`, 'Content-Type': 'application/json' };
-}
-function haBase() {
-  return `http://${cfg.homeassistant.host}:${cfg.homeassistant.port}/api`;
-}
-function haConfigured() {
-  return cfg.homeassistant.host && cfg.homeassistant.token;
+let sonosState = {
+  playing: false, track: 'Nothing playing', artist: '—',
+  art: null, volume: 45, activeSpeaker: '',
+  library: { playlists: [], radio: [] },
+  libraryLoaded: false
+};
+
+// ── HA WebSocket for real-time state updates ──────────────────
+let haWS = null;
+let haWSMsgId = 1;
+const haWSCallbacks = {};
+
+function haWSUrl() {
+  const host = (cfg.haHost || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const port = cfg.haPort || '8123';
+  return 'ws://' + host + ':' + port + '/api/websocket';
 }
 
-async function haCall(service, data) {
-  if (!haConfigured()) return null;
-  const [domain, action] = service.split('.');
-  try {
-    const r = await fetch(`${haBase()}/services/${domain}/${action}`, {
-      method:'POST', headers: haHeaders(), body: JSON.stringify(data),
-      signal: AbortSignal.timeout(5000)
+function haWSConnect() {
+  if (!cfg.haHost || !cfg.haToken) return;
+  if (haWS && (haWS.readyState === WebSocket.OPEN || haWS.readyState === WebSocket.CONNECTING)) return;
+  try { haWS = new WebSocket(haWSUrl()); } catch(e) { return; }
+
+  haWS.onmessage = e => {
+    const msg = JSON.parse(e.data);
+    if (msg.type === 'auth_required') {
+      haWS.send(JSON.stringify({ type: 'auth', access_token: cfg.haToken }));
+    } else if (msg.type === 'auth_ok') {
+      haWSSend({ type: 'subscribe_events', event_type: 'state_changed' });
+      loadMALibrary(); // fetch library once connected
+    } else if (msg.type === 'result' && haWSCallbacks[msg.id]) {
+      haWSCallbacks[msg.id](msg);
+      delete haWSCallbacks[msg.id];
+    } else if (msg.type === 'event') {
+      const eid = msg.event?.data?.entity_id;
+      if (eid === sonosState.activeSpeaker) {
+        const ns = msg.event.data.new_state;
+        if (ns) updateSonosFromState(ns);
+      }
+    }
+  };
+  haWS.onclose = () => { haWS = null; setTimeout(haWSConnect, 10000); };
+  haWS.onerror = () => {};
+}
+
+function haWSSend(payload, cb) {
+  if (!haWS || haWS.readyState !== WebSocket.OPEN) return;
+  const id = haWSMsgId++;
+  payload.id = id;
+  if (cb) haWSCallbacks[id] = cb;
+  haWS.send(JSON.stringify(payload));
+}
+
+function updateSonosFromState(state) {
+  const a = state.attributes || {};
+  sonosState.playing = state.state === 'playing';
+  sonosState.track   = a.media_title  || (state.state === 'playing' ? 'Playing' : 'Nothing playing');
+  sonosState.artist  = a.media_artist || a.media_album_name || '—';
+  const haRoot = 'http://' + (cfg.haHost||'').replace(/^https?:\/\//, '') + ':' + (cfg.haPort||'8123');
+  sonosState.art = a.entity_picture ? haRoot + a.entity_picture : null;
+  sonosState.volume = Math.round((a.volume_level || 0) * 100);
+  renderSonos();
+}
+
+// ── Music Assistant Library ───────────────────────────────────
+// Uses music_assistant.get_library — no speaker required.
+// We need the config_entry_id for MA. We discover it from HA entity attributes.
+function getMAConfigEntryId() {
+  const states = window._haStates || [];
+  // MA entities have mass_player_id attribute; their platform_instance_id is config entry
+  const maEntity = states.find(s => s.attributes?.mass_player_id);
+  return maEntity?.attributes?.platform_instance_id
+      || maEntity?.context?.id
+      || null;
+}
+
+async function loadMALibrary() {
+  if (!cfg.haToken || !cfg.haHost) return;
+  if (sonosState.libraryLoaded) return;
+
+  // Call mass.get_library for playlists and radio via WS call_service + return_response
+  const types = ['playlist', 'radio'];
+  const results = {};
+
+  await Promise.all(types.map(type => new Promise(resolve => {
+    haWSSend({
+      type: 'call_service',
+      domain: 'music_assistant',
+      service: 'get_library',
+      return_response: true,
+      service_data: {
+        media_type: type,
+        favorite: true,
+        limit: 50
+      }
+    }, result => {
+      console.log('[MA Library]', type, JSON.stringify(result).slice(0, 300));
+      if (result.success && result.result?.response) {
+        const resp = result.result.response;
+        // Response is keyed by config_entry_id or direct array
+        const items = Array.isArray(resp)
+          ? resp
+          : Object.values(resp)[0]?.[type + 's'] || Object.values(resp)[0] || [];
+        results[type] = Array.isArray(items) ? items : [];
+      } else {
+        results[type] = [];
+      }
+      resolve();
     });
-    appState.haConnected = r.ok;
-    updateConnectionPill();
-    return r.ok ? await r.json() : null;
-  } catch(e) { return null; }
+  })));
+
+  sonosState.library.playlists = results.playlist || [];
+  sonosState.library.radio     = results.radio     || [];
+  sonosState.libraryLoaded = true;
+  console.log('[MA] Library loaded:', sonosState.library.playlists.length, 'playlists,', sonosState.library.radio.length, 'radio');
+  renderSonos();
+}
+
+// ── Playback ──────────────────────────────────────────────────
+async function playMAItem(uri, mediaType) {
+  if (!sonosState.activeSpeaker) {
+    showToast('Select a speaker first', 'err');
+    return;
+  }
+  if (navigator.vibrate) navigator.vibrate(30);
+  haWSSend({
+    type: 'call_service',
+    domain: 'music_assistant',
+    service: 'play_media',
+    service_data: {
+      entity_id: sonosState.activeSpeaker,
+      media_id:   uri,
+      media_type: mediaType,
+      enqueue:   'replace'
+    }
+  });
+  setTimeout(fetchSonosState, 2000);
+}
+
+async function haService(service, extraData) {
+  const [domain, action] = service.split('.');
+  haWSSend({
+    type: 'call_service',
+    domain, service: action,
+    service_data: Object.assign({ entity_id: sonosState.activeSpeaker }, extraData || {})
+  });
 }
 
 async function fetchSonosState() {
-  if (!haConfigured() || !appState.sonos.activeSpeaker) return;
+  const base = haBase();
+  if (!base || !cfg.haToken || !sonosState.activeSpeaker) return;
   try {
-    const r = await fetch(`${haBase()}/states/${appState.sonos.activeSpeaker}`, {
-      headers: haHeaders(), signal: AbortSignal.timeout(5000)
+    const r = await fetch(base + '/states/' + sonosState.activeSpeaker, {
+      headers: { 'Authorization': 'Bearer ' + cfg.haToken },
+      signal: AbortSignal.timeout(5000)
     });
     if (!r.ok) return;
-    const data = await r.json();
-    const attrs = data.attributes || {};
-    appState.sonos.playing = data.state === 'playing';
-    appState.sonos.track  = attrs.media_title  || (data.state==='playing'?'Playing':'Nothing playing');
-    appState.sonos.artist = attrs.media_artist || attrs.media_album_name || '—';
-    appState.sonos.art    = attrs.entity_picture ? `${haBase().replace('/api','')}${attrs.entity_picture}` : null;
-    appState.sonos.volume = Math.round((attrs.volume_level||0)*100);
-    renderSonos();
+    updateSonosFromState(await r.json());
   } catch(e) {}
 }
 
-async function sonosPlay()    { await haCall('media_player.media_play',  {entity_id: appState.sonos.activeSpeaker}); updateSonosUI(true); }
-async function sonosPause()   { await haCall('media_player.media_pause', {entity_id: appState.sonos.activeSpeaker}); updateSonosUI(false); }
-async function sonosNext()    { await haCall('media_player.media_next_track',     {entity_id: appState.sonos.activeSpeaker}); setTimeout(fetchSonosState,1200); }
-async function sonosPrev()    { await haCall('media_player.media_previous_track', {entity_id: appState.sonos.activeSpeaker}); setTimeout(fetchSonosState,1200); }
-
-async function sonosVolume(pct) {
-  appState.sonos.volume = pct;
-  cfg.sonos.volume = pct;
-  saveConfig();
-  const vf = document.getElementById('sonos-vol-fill');
-  const vp = document.getElementById('sonos-vol-pct');
-  if (vf) vf.style.width = pct + '%';
-  if (vp) vp.textContent = pct + '%';
-  await haCall('media_player.volume_set', {entity_id: appState.sonos.activeSpeaker, volume_level: pct/100});
+function togglePlay() {
+  sonosState.playing ? haService('media_player.media_pause') : haService('media_player.media_play');
+  sonosState.playing = !sonosState.playing;
+  const btn = document.getElementById('sonos-play-btn');
+  if (btn) btn.textContent = sonosState.playing ? '⏸' : '▶';
 }
+function sonosNext() { haService('media_player.media_next_track'); setTimeout(fetchSonosState, 1500); }
+function sonosPrev() { haService('media_player.media_previous_track'); setTimeout(fetchSonosState, 1500); }
 
-async function sonosPlayFav(fav) {
-  await haCall('media_player.play_media', {
-    entity_id: appState.sonos.activeSpeaker,
-    media_content_id: fav.contentId,
-    media_content_type: fav.contentType || 'favorite_item_id'
-  });
-  setTimeout(fetchSonosState, 2000);
-  // Update active chip
-  document.querySelectorAll('.fav-chip').forEach(c => c.classList.toggle('active', c.dataset.contentId === fav.contentId));
+function setVolume(pct) {
+  sonosState.volume = pct;
+  const f = document.getElementById('sonos-vol-fill');
+  if (f) f.style.width = pct + '%';
+  haService('media_player.volume_set', { volume_level: pct / 100 });
 }
 
 function selectSpeaker(entityId) {
-  appState.sonos.activeSpeaker = entityId;
-  cfg.sonos.activeSpeaker = entityId;
-  saveConfig();
-  document.querySelectorAll('.speaker-chip').forEach(c => c.classList.toggle('active', c.dataset.entityId === entityId));
+  sonosState.activeSpeaker = entityId;
+  document.querySelectorAll('.speaker-chip').forEach(c =>
+    c.classList.toggle('active', c.dataset.entityId === entityId));
   fetchSonosState();
 }
 
-function updateSonosUI(playing) {
-  appState.sonos.playing = playing;
-  const btn = document.getElementById('sonos-play-btn');
-  if (btn) btn.textContent = playing ? '⏸' : '▶';
-}
-
-function toggleSonosPlay() {
-  if (appState.sonos.playing) sonosPause(); else sonosPlay();
-}
-
+// ── Render ────────────────────────────────────────────────────
 function renderSonos() {
   const panel = document.getElementById('sonosPanel');
   if (!panel) return;
 
-  if (!haConfigured()) {
-    panel.innerHTML = `
-      <div class="sonos-unconfigured">
-        <div class="sonos-unconfigured-icon">🎵</div>
-        <div class="sonos-unconfigured-text">Connect Home Assistant to control your Sonos speakers from here.</div>
-        <div class="sonos-config-btn" onclick="switchPage('settings',document.querySelector('.nav-item:last-child'));openModal('homeassistant')">Configure in Settings →</div>
-      </div>`;
+  if (!cfg.haToken || !cfg.haHost) {
+    panel.innerHTML = `<div class="sonos-unconfigured">
+      <div class="sonos-unconfigured-icon">🎵</div>
+      <div class="sonos-unconfigured-text">Configure Home Assistant in Settings to control your speakers.</div>
+      <div class="sonos-config-btn" onclick="switchPage('settings',document.querySelectorAll('.nav-item')[3])">Open Settings →</div>
+    </div>`;
     return;
   }
 
-  const s = appState.sonos;
-  const artHtml = s.art
-    ? `<img src="${s.art}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-    : '';
-  const speakers = cfg.sonos.speakers;
-  const favorites = cfg.sonos.favorites;
+  const included = (cfg.speakers || []).filter(s => s.included);
+  if (included.length === 0) {
+    panel.innerHTML = `<div class="sonos-unconfigured">
+      <div class="sonos-unconfigured-icon">🔊</div>
+      <div class="sonos-unconfigured-text">No speakers selected. Go to Settings → Speakers and tap to include yours.</div>
+      <div class="sonos-config-btn" onclick="switchPage('settings',document.querySelectorAll('.nav-item')[3])">Select Speakers →</div>
+    </div>`;
+    return;
+  }
+
+  if (!sonosState.activeSpeaker) sonosState.activeSpeaker = included[0].entityId;
+  const s = sonosState;
+  const haRoot = 'http://' + (cfg.haHost||'').replace(/^https?:\/\//, '') + ':' + (cfg.haPort||'8123');
+  const artHtml = s.art ? `<img src="${s.art}" onerror="this.style.display='none'">` : '🎵';
+
+  // Library chips — playlists + radio, no speaker needed to browse
+  const playlists = s.library.playlists.slice(0, 12);
+  const radio     = s.library.radio.slice(0, 8);
+  const hasLibrary = playlists.length > 0 || radio.length > 0;
+
+  const libraryHtml = hasLibrary ? `
+    <div class="sonos-favs">
+      <div class="sonos-favs-label">Playlists</div>
+      <div class="sonos-favs-grid">
+        ${playlists.map(p => `<div class="fav-chip" onclick="playMAItem('${p.uri}','playlist')">${p.name}</div>`).join('')}
+        ${playlists.length === 0 ? '<div style="font-family:DM Mono,monospace;font-size:10px;color:var(--text-muted)">No favorited playlists in MA</div>' : ''}
+      </div>
+      ${radio.length > 0 ? `
+      <div class="sonos-favs-label" style="margin-top:12px">Radio</div>
+      <div class="sonos-favs-grid">
+        ${radio.map(r => `<div class="fav-chip" onclick="playMAItem('${r.uri}','radio')">${r.name}</div>`).join('')}
+      </div>` : ''}
+    </div>` : `
+    <div class="sonos-favs">
+      <div class="sonos-favs-label">Library</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:.08em">
+        ${s.libraryLoaded ? 'No favorited playlists or radio in Music Assistant. Favorite some items in the MA app first.' : 'Loading library…'}
+      </div>
+    </div>`;
 
   panel.innerHTML = `
     <div class="sonos-now-playing">
-      <div class="sonos-art">
-        ${artHtml}
-        <span class="art-placeholder" ${s.art?'style="display:none"':''}>🎵</span>
-      </div>
+      <div class="sonos-art">${artHtml}</div>
       <div class="sonos-track-info">
         <div class="sonos-track">${s.track}</div>
         <div class="sonos-artist">${s.artist}</div>
-        <div class="sonos-room">${speakers.find(sp=>sp.entityId===s.activeSpeaker)?.name || 'No speaker selected'}</div>
+        <div class="sonos-room">${included.find(sp => sp.entityId === s.activeSpeaker)?.name || '—'}</div>
       </div>
     </div>
 
-    ${speakers.length > 1 ? `
-    <div class="speaker-select-row">
-      ${speakers.map(sp=>`<div class="speaker-chip${sp.entityId===s.activeSpeaker?' active':''}" data-entity-id="${sp.entityId}" onclick="selectSpeaker('${sp.entityId}')">${sp.name}</div>`).join('')}
+    ${included.length > 1 ? `<div class="speaker-select-row">
+      ${included.map(sp => `<div class="speaker-chip${sp.entityId === s.activeSpeaker ? ' active' : ''}"
+        data-entity-id="${sp.entityId}"
+        onclick="selectSpeaker('${sp.entityId}')">${sp.name}</div>`).join('')}
     </div>` : ''}
 
     <div class="sonos-controls">
       <button class="sonos-ctrl-btn" onclick="sonosPrev()">⏮</button>
-      <button class="sonos-ctrl-btn play-btn" id="sonos-play-btn" onclick="toggleSonosPlay()">${s.playing?'⏸':'▶'}</button>
+      <button class="sonos-ctrl-btn play-btn" id="sonos-play-btn" onclick="togglePlay()">${s.playing ? '⏸' : '▶'}</button>
       <button class="sonos-ctrl-btn" onclick="sonosNext()">⏭</button>
     </div>
 
@@ -1468,363 +1903,58 @@ function renderSonos() {
       <div class="sonos-vol-track" id="sonosVolTrack">
         <div class="sonos-vol-fill" id="sonos-vol-fill" style="width:${s.volume}%"></div>
       </div>
-      <div class="sonos-vol-pct" id="sonos-vol-pct">${s.volume}%</div>
+      <div class="sonos-vol-pct">${s.volume}%</div>
     </div>
 
-    ${favorites.length ? `
-    <div class="sonos-favs">
-      <div class="sonos-favs-label">Favorites</div>
-      <div class="sonos-favs-grid">
-        ${favorites.map(f=>`<div class="fav-chip" data-content-id="${f.contentId}" onclick='sonosPlayFav(${JSON.stringify(f)})'>${f.label}</div>`).join('')}
-      </div>
-    </div>` : `
-    <div class="sonos-favs">
-      <div class="sonos-favs-label">Favorites</div>
-      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:.08em">Add favorites in Settings → Music Favorites</div>
-    </div>`}`;
+    ${libraryHtml}`;
 
-  // Volume slider interaction
-  const volTrack = document.getElementById('sonosVolTrack');
-  if (volTrack) {
-    let volDragging = false;
-    const getVolPct = x => {
-      const r = volTrack.getBoundingClientRect();
-      return Math.round(Math.max(0, Math.min(100, ((x - r.left) / r.width) * 100)));
-    };
-    volTrack.addEventListener('mousedown', e => { volDragging=true; sonosVolume(getVolPct(e.clientX)); });
-    volTrack.addEventListener('touchstart', e => { volDragging=true; sonosVolume(getVolPct(e.touches[0].clientX)); }, {passive:true});
-    document.addEventListener('mousemove', e => { if(volDragging) sonosVolume(getVolPct(e.clientX)); });
-    document.addEventListener('touchmove', e => { if(volDragging) sonosVolume(getVolPct(e.touches[0].clientX)); }, {passive:true});
-    document.addEventListener('mouseup', ()=>volDragging=false);
-    document.addEventListener('touchend', ()=>volDragging=false);
+  // Volume drag
+  const vt = document.getElementById('sonosVolTrack');
+  if (vt) {
+    let vd = false;
+    const vp = x => Math.round(Math.max(0, Math.min(100,
+      ((x - vt.getBoundingClientRect().left) / vt.getBoundingClientRect().width) * 100)));
+    vt.addEventListener('mousedown',  e => { vd=true; setVolume(vp(e.clientX)); });
+    vt.addEventListener('touchstart', e => { vd=true; setVolume(vp(e.touches[0].clientX)); }, {passive:true});
+    document.addEventListener('mousemove',  e => { if(vd) setVolume(vp(e.clientX)); });
+    document.addEventListener('touchmove',  e => { if(vd) setVolume(vp(e.touches[0].clientX)); }, {passive:true});
+    document.addEventListener('mouseup',    () => vd=false);
+    document.addEventListener('touchend',   () => vd=false);
   }
 }
 
-function loadCircuits() {
-  try {
-    const s = localStorage.getItem(CIRCUITS_KEY);
-    if (s) {
-      const parsed = JSON.parse(s);
-      return DEFAULT_CIRCUITS.map(def => ({...def, ...(parsed.find(p=>p.id===def.id)||{})}));
-    }
-  } catch(e) {}
-  return DEFAULT_CIRCUITS.map(c=>({...c}));
-}
-
-function saveCircuits() {
-  try { localStorage.setItem(CIRCUITS_KEY, JSON.stringify(circuits.map(({id,label,icon,accentClass,on,visible,pinned,hidden})=>({id,label,icon,accentClass,on,visible,pinned,hidden})))); } catch(e) {}
-}
-
-function renderCircuits() {
-  const grid = document.getElementById('circuitGrid');
-  grid.innerHTML = '';
-  const visible = circuits.filter(c=>!c.hidden);
-  const ordered = [...visible.filter(c=>c.pinned), ...visible.filter(c=>!c.pinned)];
-  ordered.forEach(circ => {
-    const el = document.createElement('div');
-    el.className = `circuit-btn${circ.on?' on':''}${circ.accentClass?' '+circ.accentClass:''}${circ.pinned?' pinned':''}`;
-    el.id = `btn-${circ.id}`;
-    el.dataset.circuitId = circ.id;
-    el.innerHTML = `
-      <div class="pin-badge">📌</div>
-      <div class="circuit-top"><span class="circuit-icon">${circ.icon}</span><div class="toggle-ring"></div></div>
-      <div><div class="circuit-name">${circ.label}</div><div class="circuit-status" id="status-${circ.id}">${circ.on?'Running':'Off'}</div></div>
-      <div class="card-edit-overlay">
-        <div class="edit-circuit-label">Circuit · ${circ.id}</div>
-        <div class="edit-circuit-name" id="edit-name-${circ.id}">${circ.label}</div>
-        <input class="edit-rename-input" id="rename-input-${circ.id}" value="${circ.label}" onblur="finishRename('${circ.id}')" onkeydown="if(event.key==='Enter')finishRename('${circ.id}')">
-        <div class="edit-actions">
-          <div class="edit-action-btn pin-btn"    onclick="togglePin('${circ.id}')">${circ.pinned?'📌 Unpin':'📌 Pin'}</div>
-          <div class="edit-action-btn rename-btn" onclick="startRename('${circ.id}')">✏️ Name</div>
-          <div class="edit-action-btn up-btn"     onclick="moveCircuit('${circ.id}',-1)">↑</div>
-          <div class="edit-action-btn down-btn"   onclick="moveCircuit('${circ.id}',1)">↓</div>
-          <div class="edit-action-btn hide-btn"   onclick="hideCircuit('${circ.id}')">Hide</div>
-        </div>
-      </div>`;
-    el.addEventListener('click', ()=>{ if(!appState.customizing) toggleCircuit(circ.id); });
-    grid.appendChild(el);
-  });
-  renderHiddenDrawer();
-}
-
-function renderHiddenDrawer() {
-  const hidden = circuits.filter(c=>c.hidden);
-  const drawer = document.getElementById('hiddenDrawer');
-  const body   = document.getElementById('hiddenDrawerBody');
-  document.getElementById('hiddenCount').textContent = hidden.length;
-  drawer.style.display = hidden.length > 0 ? 'block' : 'none';
-  body.innerHTML = hidden.map(c=>`
-    <div class="hidden-circuit-row">
-      <div class="hidden-circuit-info">
-        <div class="hidden-circuit-icon">${c.icon}</div>
-        <div><div class="hidden-circuit-name">${c.label}</div><div class="hidden-circuit-id">${c.id}</div></div>
-      </div>
-      <div class="restore-btn" onclick="restoreCircuit('${c.id}')">Show</div>
-    </div>`).join('');
-}
-
-function toggleCircuit(id) {
-  const c = circuits.find(x=>x.id===id); if(!c) return;
-  c.on = !c.on;
-  const btn = document.getElementById(`btn-${id}`);
-  const st  = document.getElementById(`status-${id}`);
-  if (btn) btn.classList.toggle('on', c.on);
-  if (st)  st.textContent = c.on ? 'Running' : 'Off';
-  if (id==='spa') syncSpaCard(c.on);
-  if (navigator.vibrate) navigator.vibrate(28);
-  saveCircuits();
-  apiSet(id, c.on ? 1 : 0);
-}
-
-function togglePin(id) {
-  const c = circuits.find(x=>x.id===id); if(!c) return;
-  c.pinned = !c.pinned; saveCircuits(); renderCircuits();
-}
-
-function hideCircuit(id) {
-  const c = circuits.find(x=>x.id===id); if(!c) return;
-  c.hidden=true; c.visible=false; c.pinned=false; saveCircuits(); renderCircuits();
-  if (navigator.vibrate) navigator.vibrate(20);
-}
-
-function restoreCircuit(id) {
-  const c = circuits.find(x=>x.id===id); if(!c) return;
-  c.hidden=false; c.visible=true; saveCircuits(); renderCircuits();
-}
-
-function moveCircuit(id, dir) {
-  const vis = circuits.filter(c=>!c.hidden);
-  const idx = vis.findIndex(c=>c.id===id);
-  const nIdx = idx + dir;
-  if (nIdx<0||nIdx>=vis.length) return;
-  const rA = circuits.indexOf(vis[idx]);
-  const rB = circuits.indexOf(vis[nIdx]);
-  [circuits[rA],circuits[rB]] = [circuits[rB],circuits[rA]];
-  saveCircuits(); renderCircuits();
-}
-
-function startRename(id) {
-  const inp = document.getElementById(`rename-input-${id}`);
-  const nm  = document.getElementById(`edit-name-${id}`);
-  if (!inp) return;
-  inp.classList.add('visible'); nm.style.display='none'; inp.focus(); inp.select();
-}
-
-function finishRename(id) {
-  const inp = document.getElementById(`rename-input-${id}`);
-  const nm  = document.getElementById(`edit-name-${id}`);
-  if (!inp) return;
-  const v = inp.value.trim();
-  if (v) { const c=circuits.find(x=>x.id===id); if(c) c.label=v; saveCircuits(); renderCircuits(); return; }
-  inp.classList.remove('visible'); if(nm) nm.style.display='';
-}
-
-function enterCustomize() {
-  appState.customizing = true;
-  document.getElementById('page-control').classList.add('customizing');
-  document.getElementById('customizeBar').classList.add('visible');
-  document.getElementById('hiddenDrawer').classList.add('open');
-  if (navigator.vibrate) navigator.vibrate([20,30,20]);
-}
-
-function exitCustomize() {
-  appState.customizing = false;
-  document.getElementById('page-control').classList.remove('customizing');
-  document.getElementById('customizeBar').classList.remove('visible');
-  renderCircuits();
-}
-
-function toggleHiddenDrawer() { document.getElementById('hiddenDrawer').classList.toggle('open'); }
-
-// ============================================================
-// SPA / HEATER / PUMP
-// ============================================================
-function toggleSpaMode() {
-  appState.spaMode = !appState.spaMode;
-  syncSpaCard(appState.spaMode);
-  const c = circuits.find(x=>x.id==='spa');
-  if (c) { c.on=appState.spaMode; saveCircuits(); renderCircuits(); }
-  if (navigator.vibrate) navigator.vibrate(40);
-}
-
-function syncSpaCard(on) {
-  appState.spaMode = on;
-  document.getElementById('spaCard').classList.toggle('active', on);
-  document.getElementById('spaModeStatus').textContent = on ? 'Active — Heating to 102°F' : 'Inactive — Tap to activate';
-  const st = document.getElementById('spaTemp');
-  if (st) st.textContent = on ? '98' : '--';
-  const hs = document.getElementById('heaterState');
-  if (hs) { hs.textContent = on ? 'Heating' : 'Standby'; hs.className = on ? 'heater-state heating' : 'heater-state'; }
-}
-
-function adjustSetpoint(delta) {
-  appState.setpoint = Math.min(104, Math.max(60, appState.setpoint + delta));
-  document.getElementById('setpointDisplay').innerHTML = `${appState.setpoint} <span>°F</span>`;
-  document.getElementById('poolTarget').textContent = `↑ Target ${appState.setpoint}°`;
-  if (navigator.vibrate) navigator.vibrate(15);
-  apiSet('pool_heat_sp', appState.setpoint);
-}
-
-const MIN_RPM=600, MAX_RPM=3450;
-const rpmToPct = r=>((r-MIN_RPM)/(MAX_RPM-MIN_RPM))*100;
-const pctToRpm = p=>Math.round(MIN_RPM+(p/100)*(MAX_RPM-MIN_RPM));
-
-function setPumpRpm(rpm) {
-  appState.pumpRpm = Math.round(Math.max(MIN_RPM, Math.min(MAX_RPM, rpm)));
-  const pct = rpmToPct(appState.pumpRpm);
-  document.getElementById('pumpRpm').innerHTML = `${appState.pumpRpm} <span>RPM</span>`;
-  document.getElementById('speedFill').style.width = pct+'%';
-  document.getElementById('speedThumb').style.left  = pct+'%';
-}
-
-function setPreset(rpm, name) {
-  setPumpRpm(rpm);
-  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===name));
-  if (navigator.vibrate) navigator.vibrate(20);
-  apiSet('pump_speed', rpm);
-}
-
-let dragging = false;
-const track = document.getElementById('speedTrack');
-function getTrackPct(x) { const r=track.getBoundingClientRect(); return Math.max(0,Math.min(100,((x-r.left)/r.width)*100)); }
-track.addEventListener('mousedown', e=>{ dragging=true; setPumpRpm(pctToRpm(getTrackPct(e.clientX))); document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active')); });
-track.addEventListener('touchstart', e=>{ dragging=true; setPumpRpm(pctToRpm(getTrackPct(e.touches[0].clientX))); document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active')); }, {passive:true});
-document.addEventListener('mousemove', e=>{ if(dragging) setPumpRpm(pctToRpm(getTrackPct(e.clientX))); });
-document.addEventListener('touchmove', e=>{ if(dragging) setPumpRpm(pctToRpm(getTrackPct(e.touches[0].clientX))); }, {passive:true});
-document.addEventListener('mouseup', ()=>dragging=false);
-document.addEventListener('touchend', ()=>dragging=false);
-
-// ============================================================
-// API LAYER — reads from cfg, falls back to mock gracefully
-// ============================================================
-function aqBase() { return `http://${cfg.aqualinkd.host}:${cfg.aqualinkd.port}`; }
-function aqConfigured() { return !!cfg.aqualinkd.host; }
-
-async function apiGet(endpoint) {
-  if (!aqConfigured()) return null;
-  try {
-    const r = await fetch(`${aqBase()}/api/${endpoint}`, {signal: AbortSignal.timeout(4000)});
-    appState.aqConnected = r.ok; updateConnectionPill();
-    return r.ok ? await r.json() : null;
-  } catch(e) { appState.aqConnected = false; updateConnectionPill(); return null; }
-}
-
-async function apiSet(id, value) {
-  if (!aqConfigured()) { console.log(`[DEMO] SET ${id}=${value}`); return; }
-  try {
-    await fetch(`${aqBase()}/api/${id}/${value}`, {method:'GET', signal: AbortSignal.timeout(4000)});
-    appState.aqConnected = true; updateConnectionPill();
-  } catch(e) { appState.aqConnected = false; updateConnectionPill(); }
-}
-
-async function pollAqualinkd() {
-  const data = await apiGet('status');
-  if (!data) return;
-  // Wire up live data here when AqualinkD is connected:
-  // setPumpRpm(data.pump_rpm || appState.pumpRpm);
-  // document.getElementById('poolTemp').innerHTML = `${data.pool_temp||appState.poolTemp}<sup>°F</sup>`;
-  // circuits.forEach(c => { if(data[c.id]!==undefined) { c.on=!!data[c.id]; ... } });
-}
-
-// ============================================================
-// PAGE NAVIGATION
-// ============================================================
-function switchPage(name, navEl) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(`page-${name}`).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  if (navEl) navEl.classList.add('active');
-  if (name === 'control') { exitCustomize(); }
-  window.scrollTo(0,0);
-}
-
-// ============================================================
-// CLOCK
-// ============================================================
-function updateClock() {
-  const now = new Date();
-  const d = now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-  const t = now.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit'});
-  document.getElementById('timeClock').textContent = `${d}  ·  ${t}`;
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-// Pool temp drift (demo mode)
-setInterval(()=>{
-  if (aqConfigured()) return;
-  if (Math.random()>.7) {
-    appState.poolTemp = Math.round((appState.poolTemp+(Math.random()-.5)*.2)*10)/10;
-    document.getElementById('poolTemp').innerHTML = `${Math.round(appState.poolTemp)}<sup>°F</sup>`;
-  }
-}, 6000);
-
-// Poll AqualinkD every 5s (no-ops gracefully when not configured)
-setInterval(pollAqualinkd, 5000);
-
-// Poll Sonos every 10s when HA configured
-setInterval(()=>{ if(haConfigured()&&appState.sonos.activeSpeaker) fetchSonosState(); }, 10000);
+// Poll state every 8s
+setInterval(() => {
+  if (cfg.haToken && cfg.haHost && sonosState.activeSpeaker) fetchSonosState();
+}, 8000);
 
 // ============================================================
 // INIT
 // ============================================================
 window.addEventListener('load', () => {
-  const firstRun = isFirstRun();
-
-  applyConfig();
+  initPumpSlider(); // must be first — needs DOM ready
+  setTimeout(() => document.getElementById('loadingOverlay').classList.add('hidden'), 1400);
   renderCircuits();
+  applyIdentity();
   renderSonos();
-  updateConnectionPill();
-
-  setTimeout(() => {
-    document.getElementById('loadingOverlay').classList.add('hidden');
-    if (firstRun) {
-      setTimeout(showWizard, 500);
-    }
-  }, 1400);
-
-  // Set active speaker default
-  if (cfg.sonos.speakers.length && !appState.sonos.activeSpeaker) {
-    appState.sonos.activeSpeaker = cfg.sonos.activeSpeaker || cfg.sonos.speakers[0].entityId;
+  setConnectionState(false);
+  // Set active speaker and connect
+  const included = (cfg.speakers || []).filter(s => s.included);
+  if (included.length > 0) sonosState.activeSpeaker = included[0].entityId;
+  if (cfg.haToken && cfg.haHost) {
+    haWSConnect(); // connects WS, loads MA library on auth_ok
+    if (sonosState.activeSpeaker) fetchSonosState();
   }
 });
 
-
-// ============================================================
-// PWA — Service Worker registration
-// ============================================================
-(function() {
-  // Register service worker
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js', { scope: './' })
-        .then(reg => console.log('[LAZPOOL] SW registered:', reg.scope))
-        .catch(err => console.warn('[LAZPOOL] SW error:', err));
-    });
-  }
-
-  // iOS "Add to Home Screen" hint — shown once per session
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isStandalone = window.navigator.standalone;
-  if (isIOS && !isStandalone && !sessionStorage.getItem('lazpool_ios_hint')) {
-    sessionStorage.setItem('lazpool_ios_hint', '1');
-    setTimeout(() => {
-      const b = document.createElement('div');
-      b.style.cssText = [
-        'position:fixed', 'bottom:90px', 'left:50%', 'transform:translateX(-50%)',
-        'z-index:700', 'background:rgba(11,20,37,.97)',
-        'border:1px solid rgba(201,168,76,.35)', 'border-radius:14px',
-        'padding:11px 18px', 'font-family:DM Mono,monospace', 'font-size:10px',
-        'letter-spacing:.12em', 'color:rgba(201,168,76,.9)', 'text-align:center',
-        'max-width:300px', 'line-height:1.6', 'animation:fadeIn .3s ease both',
-        'pointer-events:none'
-      ].join(';');
-      b.innerHTML = 'To install: tap <strong>&#x2BAD;</strong> Share &rarr; <strong>Add to Home Screen</strong>';
-      document.body.appendChild(b);
-      setTimeout(() => { b.style.transition = 'opacity .5s'; b.style.opacity = '0'; setTimeout(() => b.remove(), 500); }, 5500);
-    }, 2500);
-  }
-})();
+// PWA service worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js', {scope: './'})
+      .then(r => console.log('[LAZPOOL] SW registered'))
+      .catch(e => console.warn('[LAZPOOL] SW:', e));
+  });
+}
 </script>
 </body>
 </html>

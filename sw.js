@@ -1,5 +1,5 @@
 // LAZPOOL Service Worker v1.2
-const CACHE_NAME = 'lazpool-v1.2';
+const CACHE_NAME = 'lazpool-v2.0';
 const ASSETS = [
   './',
   './index.html',

@@ -20,6 +20,30 @@ Built for the AquaLink RS-4 Combo (REV T.2) with AqualinkD as the local backend.
 
 ---
 
+
+## Hosting Options
+
+LAZPOOL has three access modes, selectable in Settings → Access & Hosting:
+
+**🏠 Local Serve (default — recommended)**  
+Serve from the same machine as HA. No CORS issues.
+```bash
+python3 -m http.server 3000 --directory lazpool
+```
+Then access at `http://10.0.0.51:3000` (use your HA machine's IP).
+
+**🐙 GitHub Pages**  
+Host publicly on GitHub. Requires adding your Pages URL to HA's CORS config:
+```yaml
+# configuration.yaml
+http:
+  cors_allowed_origins:
+    - https://yourusername.github.io
+```
+
+**🌐 HA CORS Allowed**  
+You've already configured CORS in HA — all external origins work.
+
 ## Setup
 
 ### 1. Hardware needed
@@ -100,7 +124,8 @@ Generate a Long-Lived Access Token in HA → Profile → Security.
 
 | Version | Changes |
 |---|---|
-| v1.2 | Settings system, setup wizard, Sonos panel, export/import, PWA |
+| v1.3 | Access mode selector (Local/GitHub/CORS), version bump |
+| v1.2 | Settings system, setup wizard, Music Assistant auto-discovery, export/import, PWA |
 | v1.1 | Circuit registry, pin/hide/rename/reorder, hidden drawer |
 | v1.0 | Initial release |
 
